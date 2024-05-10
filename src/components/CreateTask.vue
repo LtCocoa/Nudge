@@ -11,16 +11,16 @@
     <label for="task-description">Task description:</label>
     <input
       id="task-description"
-      class="input"
       v-model="task.description"
+      class="input"
       type="text"
     >
 
     <label for="task-schedule">Task schedule:</label>
     <input
       id="task-schedule"
-      class="input"
       v-model="task.schedule"
+      class="input"
       type="datetime-local"
     >
 

@@ -1,5 +1,10 @@
 import { defineStore } from "pinia";
-import { getUserProfiles, saveUserProfiles, showNotification } from "../utils";
+import {
+  getUserProfiles,
+  saveUserProfiles,
+  showNotification,
+  scrollElementIntoView
+} from "../utils";
 
 
 export const useAppStore = defineStore('app', {
@@ -25,7 +30,13 @@ export const useAppStore = defineStore('app', {
     },
     addTask(task) {
       this.currentProfile.tasks.push(task);
-      showNotification({ title: `Created new task: ${task.name}`, body: task.description });
+      showNotification(
+        {
+          title: `Created new task: ${task.name}`,
+          body: task.description
+        },
+        () => scrollElementIntoView(task.uuid)
+      );
       saveUserProfiles(this.profiles);
     }
   }

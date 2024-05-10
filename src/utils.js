@@ -16,3 +16,7 @@ export const initAppData = () => {
 export const showNotification = (params = { title: 'Default title', body: 'default body' }, onclick = null) => {
   new window.Notification(params.title, { body: params.body }).onclick = onclick;
 }
+
+export const scrollElementIntoView = (id) => {
+  document.getElementById(id).scrollIntoView();
+}
