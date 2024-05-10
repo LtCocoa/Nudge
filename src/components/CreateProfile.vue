@@ -7,13 +7,13 @@
         id="name"
         v-model="userName"
         type="text"
-        class="fg-standart p-2 rounded"
+        class="input"
       >
     </div>
 
     <button
       type="button"
-      class="fg-standart p-2  mt-auto rounded w-full hover:bg-gray-600 hover:text-slate-200 transition-all"
+      class="btn mt-auto"
       @click="onClick"
     >
       Add
@@ -41,8 +41,3 @@ const onClick = async () => {
 }
 
 </script>
-
-
-<style scoped>
-
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-96 min-w-96 rounded-2xl bg-standart flex flex-col overflow-hidden">
+  <div class="h-full w-full bg-standart flex flex-col overflow-hidden">
     <div class="flex justify-start bg-darker">
       <RouterLink
         to="/"
@@ -20,12 +20,18 @@
       >
         Profile
       </RouterLink>
+      <div
+        v-if="store.currentProfile"
+        class="ml-auto p-4 flex justify-center items-center"
+      >
+        {{ store.currentProfile.name }}
+      </div>
     </div>
 
     <RouterView v-slot="{ Component }">
       <template v-if="Component">
         <Suspense>
-          <div class="p-4 flex-1">
+          <div class="flex flex-col flex-1 overflow-auto p-4">
             <component :is="Component" />
           </div>
           <template #fallback>

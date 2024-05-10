@@ -1,5 +1,5 @@
 import { createRouter, createMemoryHistory } from 'vue-router';
-import Profiles from './components/Profiles.vue';
+import ProfileList from './components/ProfileList.vue';
 import CreateProfile from './components/CreateProfile.vue';
 import ProfileCard from './components/ProfileCard.vue';
 
@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/',
     name: 'profiles',
-    component: Profiles
+    component: ProfileList
   },
   {
     path: '/create-profile',

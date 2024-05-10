@@ -1,6 +1,3 @@
-import { useAppStore } from "./stores/Store";
-import { storeToRefs } from "pinia";
-
 export const saveUserProfiles = (profiles) => {
   return window.filesystem.saveFile(JSON.stringify({ profiles }));
 }
@@ -14,4 +11,8 @@ export const initAppData = () => {
     profiles: [],
     currentProfile: null,
   }
+}
+
+export const showNotification = (params = { title: 'Default title', body: 'default body' }, onclick = null) => {
+  new window.Notification(params.title, { body: params.body }).onclick = onclick;
 }

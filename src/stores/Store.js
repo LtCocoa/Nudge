@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getUserProfiles, saveUserProfiles } from "../utils";
+import { getUserProfiles, saveUserProfiles, showNotification } from "../utils";
 
 
 export const useAppStore = defineStore('app', {
@@ -13,16 +13,20 @@ export const useAppStore = defineStore('app', {
       this.profiles = profiles;
     },
     async createNewProfile(newUserProfile) {
-      await saveUserProfiles([...this.profiles, newUserProfile]);
-      return this.getProfiles();
+      this.profiles = [...this.profiles, newUserProfile];
+      saveUserProfiles(this.profiles);
     },
     setCurrentProfile(profileUuid) {
       this.currentProfile = this.profiles.find(profile => profile.uuid == profileUuid);
     },
     async deleteProfile(profileUuid) {
-      const profiles = this.profiles.filter(({ uuid }) => uuid != profileUuid);
-      await saveUserProfiles(profiles);
-      this.getProfiles();
+      this.profiles = this.profiles.filter(({ uuid }) => uuid != profileUuid);
+      saveUserProfiles(this.profiles);
+    },
+    addTask(task) {
+      this.currentProfile.tasks.push(task);
+      showNotification({ title: `Created new task: ${task.name}`, body: task.description });
+      saveUserProfiles(this.profiles);
     }
   }
 });

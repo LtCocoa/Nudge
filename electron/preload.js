@@ -29,5 +29,5 @@ contextBridge.exposeInMainWorld('filesystem', {
   },
   'readFile': () => {
     return ipcRenderer.invoke('read-file');
-  }
+  },
 });

@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .btn {
+    @apply fg-standart p-2 mt-auto rounded w-full hover:bg-gray-600 hover:text-slate-200 transition-all;
+  }
+  .input {
+    @apply fg-standart p-2 rounded;
+  }
+}
+
 html {
   height: 100svh;
   width: 100svw;
@@ -28,6 +37,23 @@ body #app {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #d8d8d8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .bg-standart {

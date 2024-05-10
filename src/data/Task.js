@@ -1,9 +1,9 @@
 import { v4 as uuid } from "uuid";
 
 export class Task {
-  constructor() {
+  constructor(params) {
     this.uuid = uuid();
-    this.name = 'task_text';
-    this.desription = '';
+    this.name = params?.name || '';
+    this.description = params?.description || '';
   }
 }

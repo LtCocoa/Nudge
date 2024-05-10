@@ -38,8 +38,3 @@ const onDeleteProfile = (uuid) => {
 }
 
 </script>
-
-
-<style scoped>
-
-</style>

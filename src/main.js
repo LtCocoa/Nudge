@@ -5,7 +5,7 @@ import App from './App.vue';
 import { router } from './router';
 import { useAppStore } from './stores/Store';
 
-import './style.css';
+import './main.css';
 
 const pinia = createPinia();
 
