@@ -19,7 +19,7 @@
     <label for="task-schedule">Task schedule:</label>
     <input
       id="task-schedule"
-      v-model="task.schedule"
+      v-model="task.date"
       class="input"
       type="datetime-local"
     >
@@ -42,7 +42,6 @@ import { useAppStore } from '../stores/Store';
 
 const store = useAppStore();
 const task = ref(new Task());
-
 
 const onAddTaskClick = () => {
   store.addTask(task.value);

@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
 import {
-  getUserProfiles,
-  saveUserProfiles,
+  readAppDataFile,
+  saveAppData,
   showNotification,
-  scrollElementIntoView
+  scrollElementIntoView,
+  scheduleTask
 } from "../utils";
 
 
@@ -13,23 +14,27 @@ export const useAppStore = defineStore('app', {
     currentProfile: null,
   }),
   actions: {
-    async getProfiles() {
-      const { profiles } = await getUserProfiles();
+    async getAppData() {
+      const { profiles, currentProfile } = await readAppDataFile();
       this.profiles = profiles;
+      this.currentProfile = currentProfile;
     },
     async createNewProfile(newUserProfile) {
       this.profiles = [...this.profiles, newUserProfile];
-      saveUserProfiles(this.profiles);
+      saveAppData({ profiles: this.profiles, currentProfile: this.currentProfile });
     },
-    setCurrentProfile(profileUuid) {
+    async setCurrentProfile(profileUuid) {
+      
       this.currentProfile = this.profiles.find(profile => profile.uuid == profileUuid);
     },
     async deleteProfile(profileUuid) {
       this.profiles = this.profiles.filter(({ uuid }) => uuid != profileUuid);
-      saveUserProfiles(this.profiles);
+      saveAppData({ profiles: this.profiles, currentProfile: this.currentProfile });
     },
     addTask(task) {
       this.currentProfile.tasks.push(task);
+
+      // TODO: возможно стоит перенести в электрон
       showNotification(
         {
           title: `Created new task: ${task.name}`,
@@ -37,7 +42,12 @@ export const useAppStore = defineStore('app', {
         },
         () => scrollElementIntoView(task.uuid)
       );
-      saveUserProfiles(this.profiles);
+
+      if (task.date) {
+        scheduleTask(task);
+      }
+
+      saveAppData({ profiles: this.profiles, currentProfile: this.currentProfile });
     }
   }
 });

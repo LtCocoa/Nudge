@@ -5,5 +5,6 @@ export class Task {
     this.uuid = uuid();
     this.name = params?.name || '';
     this.description = params?.description || '';
+    this.date = params?.date || null;
   }
 }

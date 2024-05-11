@@ -31,3 +31,9 @@ contextBridge.exposeInMainWorld('filesystem', {
     return ipcRenderer.invoke('read-file');
   },
 });
+
+contextBridge.exposeInMainWorld('tasks', {
+  'scheduleTask': (task) => {
+    return ipcRenderer.send('schedule-task', task);
+  }
+});

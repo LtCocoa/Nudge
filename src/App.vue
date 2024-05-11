@@ -45,10 +45,14 @@
 
 <script setup>
 import { useAppStore } from './stores/Store';
-
+import { useRouter } from 'vue-router';
 
 const store = useAppStore();
-store.getProfiles();
+const router = useRouter();
+
+store.getAppData().then(() => {
+  router.push({ name: 'profile' });
+});
 
 </script>
 

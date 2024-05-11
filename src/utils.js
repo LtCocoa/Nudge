@@ -1,9 +1,15 @@
-export const saveUserProfiles = (profiles) => {
-  return window.filesystem.saveFile(JSON.stringify({ profiles }));
+import { toRaw } from "vue";
+
+export const saveAppData = (data) => {
+  return window.filesystem.saveFile(JSON.stringify(data));
 }
 
-export const getUserProfiles = () => {
+export const readAppDataFile = () => {
   return window.filesystem.readFile();
+}
+
+export const scheduleTask = (task) => {
+  window.tasks.scheduleTask(toRaw(task));
 }
 
 export const initAppData = () => {

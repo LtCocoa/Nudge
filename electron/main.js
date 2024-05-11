@@ -5,9 +5,11 @@ import path from 'node:path';
 import fs from 'fs';
 import { session } from 'electron';
 import { initAppData } from '../src/utils';
+import { TaskScheduler } from './TaskScheduler';
 
-const require = createRequire(import.meta.url)
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const require = createRequire(import.meta.url);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 
 // The built directory structure
 //
@@ -60,6 +62,10 @@ function createWindow() {
     } catch (error) {
       return initAppData();
     }
+  });
+
+  ipcMain.on('schedule-task', (_, task) => {
+    new TaskScheduler(task);
   });
 
   if (VITE_DEV_SERVER_URL) {
