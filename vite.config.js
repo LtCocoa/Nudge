@@ -1,11 +1,16 @@
 import { defineConfig } from 'vite';
-import path from 'node:path';
+import path from 'path';
 import electron from 'vite-plugin-electron/simple';
 import vue from '@vitejs/plugin-vue';
 import renderer from 'vite-plugin-electron-renderer'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    }
+  },
   plugins: [
     vue(),
     renderer(),

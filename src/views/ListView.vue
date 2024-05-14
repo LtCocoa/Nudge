@@ -48,10 +48,10 @@
 </template>
 
 <script setup>
-import { useAppStore } from '../stores/Store';
+import { useAppStore } from '@/stores/Store';
 import { computed } from 'vue';
-import ModalWindow from './ModalWindow.vue';
-import CreateTask from './CreateTask.vue';
+import ModalWindow from '@/components/ModalWindow.vue';
+import CreateTask from '@/components/CreateTask.vue';
 
 
 const store = useAppStore();

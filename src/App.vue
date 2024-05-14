@@ -3,10 +3,16 @@
     <div class="flex justify-start bg-darker">
       <RouterLink
         to="/tasks"
-        exact
         class="nav-link p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
       >
         Tasks
+      </RouterLink>
+
+      <RouterLink
+        to="/calendar"
+        class="nav-link p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
+      >
+        Calendar
       </RouterLink>
     </div>
 

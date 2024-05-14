@@ -1,11 +1,17 @@
 import { createRouter, createMemoryHistory } from 'vue-router';
-import TaskList from './components/TaskList.vue';
+import ListView from './views/ListView.vue';
+import CalendarView from './views/CalendarView.vue';
 
 const routes = [
   {
     path: '/tasks',
     name: 'tasks',
-    component: TaskList,
+    component: ListView,
+  },
+  {
+    path: '/calendar',
+    name: 'calendar',
+    component: CalendarView
   }
 ];
 
