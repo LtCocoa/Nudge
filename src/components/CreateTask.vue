@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col text-xl gap-2">
-    <label for="task-name">Task name:</label>
+    <label for="task-name">Name:</label>
     <input
       id="task-name"
       v-model="task.name"
@@ -8,7 +8,7 @@
       type="text"
     >
 
-    <label for="task-description">Task description:</label>
+    <label for="task-description">Description:</label>
     <input
       id="task-description"
       v-model="task.description"
@@ -16,7 +16,7 @@
       type="text"
     >
 
-    <label for="task-schedule">Task schedule:</label>
+    <label for="task-schedule">Schedule:</label>
     <input
       id="task-schedule"
       v-model="task.date"

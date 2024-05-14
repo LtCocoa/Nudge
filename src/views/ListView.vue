@@ -7,7 +7,7 @@
       There are no tasks yet.
     </span>
   </div>
-  <div class="my-3 overflow-y-scroll shadow-inner">
+  <div class="my-3 overflow-y-scroll shadow-inner flex-1">
     <ul class="leading-7 flex flex-col gap-2 overflow-y-auto drop-shadow-md">
       <li
         v-for="(task, index) in store.tasks"
@@ -15,8 +15,14 @@
         :key="index"
         class="rounded-lg"
       >
-        <div class="px-2 bg-zinc-50 border-b">
-          {{ task.name }}
+        <div class="px-2 bg-zinc-50 border-b flex flex-row justify-between items-center">
+          <span>{{ task.name }}</span>
+          <div class="flex flex-row items-center gap-2 text-gray-500" v-if="task.date">
+            <svg width="15" height="15" viewBox="0 0 800 800">
+              <use :xlink:href="`${ClockIcon}#icon`" />
+            </svg>
+            <span>{{ formatDate(task.date) }}</span>
+          </div>
         </div>
         <div class="p-2 bg-zinc-50">
           {{ task.description }}
@@ -52,7 +58,8 @@ import { useAppStore } from '@/stores/Store';
 import { computed } from 'vue';
 import ModalWindow from '@/components/ModalWindow.vue';
 import CreateTask from '@/components/CreateTask.vue';
-
+import ClockIcon from '@/assets/clock.svg';
+import { formatDate } from '@/utils';
 
 const store = useAppStore();
 const hasTasks = computed(() => {

@@ -25,3 +25,31 @@ export const showNotification = (params = { title: 'Default title', body: 'defau
 export const scrollElementIntoView = (id) => {
   document.getElementById(id).scrollIntoView();
 }
+
+export const formatDate = (rawDate) => {
+  const date = new Date(rawDate);
+
+  if (date == 'Invalid Date') {
+    return '';
+  }
+
+  const addZero = (number) => {
+    return number < 10 ? `0${number}` : number;
+  };
+
+  const [
+    day,
+    month,
+    year,
+    hours,
+    minutes,
+  ] = [
+    addZero(date.getDate()),
+    addZero(date.getMonth()),
+    date.getFullYear(),
+    addZero(date.getHours()),
+    addZero(date.getMinutes()),
+  ];
+
+  return `${day}.${month}.${year} ${hours}:${minutes}`;
+}
