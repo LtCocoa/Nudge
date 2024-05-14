@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col text-xl">
+  <div class="flex flex-col text-xl gap-2">
     <label for="task-name">Task name:</label>
     <input
       id="task-name"

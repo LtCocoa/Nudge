@@ -7,8 +7,8 @@
     "dev": "vite",
     "build": "vue-tsc && vite build && electron-builder",
     "preview": "vite preview",
-    "eslint": "eslint",
-    "eslint-fix": "eslint --fix"
+    "eslint": "eslint src",
+    "eslint-fix": "eslint src --fix"
   },
   "dependencies": {
     "node-schedule": "^2.1.1",

@@ -23,19 +23,35 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 process.env.APP_ROOT = path.join(__dirname, '..');
 
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
-export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
-export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
-export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
+export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL'];
+export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron');
+export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
 
-process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
+process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST;
 
 let win;
+
+const taskScheduler = new TaskScheduler();
+
+const getAppData = () => {
+  try {
+    const result = JSON.parse(fs.readFileSync('data/data.json', 'utf-8'));
+
+    if (!result.tasks) {
+      result = initAppData();
+    }
+
+    return result;
+  } catch (error) {
+    return initAppData();
+  }
+}
 
 function createWindow() {
   win = new BrowserWindow({
     width: 1200,
     height: 900,
-    icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    icon: path.join(`${process.env.APP_ROOT}/src/assets`, 'alarm_clock.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
     },
@@ -45,34 +61,24 @@ function createWindow() {
 
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {
-    win?.webContents.send('main-process-message', (new Date).toLocaleString())
+    win?.webContents.send('main-process-message', (new Date).toLocaleString());
   });
 
   ipcMain.handle('save-file', (event, json) => {
     return fs.writeFileSync('data/data.json', json);
   });
 
-  ipcMain.handle('read-file', () => {
-    try {
-      const result = JSON.parse(fs.readFileSync('data/data.json', 'utf-8'));
-      if (!result.profiles) {
-        result = initAppData();
-      }
-      return result;
-    } catch (error) {
-      return initAppData();
-    }
-  });
+  ipcMain.handle('read-file', getAppData);
 
   ipcMain.on('schedule-task', (_, task) => {
-    new TaskScheduler(task);
+    taskScheduler.scheduleTask(task);
   });
 
   if (VITE_DEV_SERVER_URL) {
-    win.loadURL(VITE_DEV_SERVER_URL)
+    win.loadURL(VITE_DEV_SERVER_URL);
   } else {
     // win.loadFile('dist/index.html')
-    win.loadFile(path.join(RENDERER_DIST, 'index.html'))
+    win.loadFile(path.join(RENDERER_DIST, 'index.html'));
   }
 }
 
@@ -83,8 +89,8 @@ function createWindow() {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit()
-    win = null
+    app.quit();
+    win = null;
   }
 });
 
@@ -92,7 +98,7 @@ app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
+    createWindow();
   }
 });
 
@@ -106,6 +112,8 @@ app.whenReady().then(() => {
       }
     })
   });
+  const { tasks } = getAppData();
+  taskScheduler.initTasks(tasks);
 });
 
-app.setAppUserModelId('Reminder');
+app.setAppUserModelId('Scheduler');

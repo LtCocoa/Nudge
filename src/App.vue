@@ -2,30 +2,12 @@
   <div class="h-full w-full bg-standart flex flex-col overflow-hidden">
     <div class="flex justify-start bg-darker">
       <RouterLink
-        to="/"
+        to="/tasks"
         exact
         class="nav-link p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
       >
-        Profiles
+        Tasks
       </RouterLink>
-      <RouterLink
-        to="/create-profile"
-        class="nav-link p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
-      >
-        Create profile
-      </RouterLink>
-      <RouterLink
-        to="/profile"
-        class="nav-link p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
-      >
-        Profile
-      </RouterLink>
-      <div
-        v-if="store.currentProfile"
-        class="ml-auto p-4 flex justify-center items-center"
-      >
-        {{ store.currentProfile.name }}
-      </div>
     </div>
 
     <RouterView v-slot="{ Component }">
@@ -51,7 +33,7 @@ const store = useAppStore();
 const router = useRouter();
 
 store.getAppData().then(() => {
-  router.push({ name: 'profile' });
+  router.push({ name: 'tasks' });
 });
 
 </script>

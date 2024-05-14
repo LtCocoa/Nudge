@@ -10,29 +10,15 @@ import {
 
 export const useAppStore = defineStore('app', {
   state: () => ({
-    profiles: [],
-    currentProfile: null,
+    tasks: []
   }),
   actions: {
     async getAppData() {
-      const { profiles, currentProfile } = await readAppDataFile();
-      this.profiles = profiles;
-      this.currentProfile = currentProfile;
-    },
-    async createNewProfile(newUserProfile) {
-      this.profiles = [...this.profiles, newUserProfile];
-      saveAppData({ profiles: this.profiles, currentProfile: this.currentProfile });
-    },
-    async setCurrentProfile(profileUuid) {
-      
-      this.currentProfile = this.profiles.find(profile => profile.uuid == profileUuid);
-    },
-    async deleteProfile(profileUuid) {
-      this.profiles = this.profiles.filter(({ uuid }) => uuid != profileUuid);
-      saveAppData({ profiles: this.profiles, currentProfile: this.currentProfile });
+      const { tasks } = await readAppDataFile();
+      this.tasks = tasks;
     },
     addTask(task) {
-      this.currentProfile.tasks.push(task);
+      this.tasks.push(task);
 
       // TODO: возможно стоит перенести в электрон
       showNotification(
@@ -47,7 +33,7 @@ export const useAppStore = defineStore('app', {
         scheduleTask(task);
       }
 
-      saveAppData({ profiles: this.profiles, currentProfile: this.currentProfile });
+      saveAppData({ tasks: this.tasks });
     }
   }
 });

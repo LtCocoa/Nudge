@@ -14,8 +14,7 @@ export const scheduleTask = (task) => {
 
 export const initAppData = () => {
   return {
-    profiles: [],
-    currentProfile: null,
+    tasks: [],
   }
 }
 
