@@ -10,6 +10,11 @@ export const useAppStore = defineStore('app', {
   state: () => ({
     tasks: []
   }),
+  getters: {
+    sortedTasks: (state) => {
+      return state.tasks.sort((taskA, taskB) => new Date(taskA.date) - new Date(taskB.date));
+    }
+  },
   actions: {
     async getAppData() {
       const { tasks } = await readAppDataFile();
@@ -22,6 +27,10 @@ export const useAppStore = defineStore('app', {
         scheduleTask(task);
       }
 
+      saveAppData({ tasks: this.tasks });
+    },
+    deleteTask(task) {
+      this.tasks = this.tasks.filter(({ uuid }) => uuid != task.uuid);
       saveAppData({ tasks: this.tasks });
     }
   }

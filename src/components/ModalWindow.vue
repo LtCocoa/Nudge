@@ -11,11 +11,11 @@
       <div
         v-if="isOpen"
         class="fixed h-full w-full top-0 left-0 flex items-center justify-center bg-zinc-400 bg-opacity-50"
-        @click.self="onClose"
+        @mousedown.self="onClose"
       >
         <div
           ref="modalContent"
-          class="p-4 rounded-xl bg-standart shadow-xl"
+          class="p-4 rounded-xl bg-standart shadow-xl w-96"
         >
           <slot />
           <slot

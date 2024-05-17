@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Tray, Menu } from 'electron';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -9,7 +9,7 @@ import { TaskScheduler } from './TaskScheduler';
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
+const APP_NAME = 'Scheduler';
 
 // The built directory structure
 //
@@ -29,7 +29,10 @@ export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST;
 
+const pathToIcon = path.join(`${process.env.APP_ROOT}/src/assets`, 'alarm_clock.png');
+
 let win;
+let tray;
 
 const taskScheduler = new TaskScheduler();
 
@@ -47,11 +50,17 @@ const getAppData = () => {
   }
 }
 
+const closeApplication = () => {
+  if (process.platform !== 'darwin') {
+    app.exit();
+  }
+};
+
 function createWindow() {
   win = new BrowserWindow({
     width: 1200,
     height: 900,
-    icon: path.join(`${process.env.APP_ROOT}/src/assets`, 'alarm_clock.png'),
+    icon: pathToIcon,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
     },
@@ -80,19 +89,17 @@ function createWindow() {
     // win.loadFile('dist/index.html')
     win.loadFile(path.join(RENDERER_DIST, 'index.html'));
   }
+
+  win.on('close', (event) => {
+    event.preventDefault();
+    win.hide();
+  });
 }
-
-
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-    win = null;
-  }
-});
+app.on('window-all-closed', closeApplication);
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
@@ -114,6 +121,20 @@ app.whenReady().then(() => {
   });
   const { tasks } = getAppData();
   taskScheduler.initTasks(tasks);
+
+  tray = new Tray(pathToIcon);
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Quit', type: 'normal', click: closeApplication }
+  ]);
+
+  tray.setToolTip(APP_NAME);
+  tray.setContextMenu(contextMenu);
+
+  tray.on('click', () => {
+    win.show();
+  });
 });
 
-app.setAppUserModelId('Scheduler');
+
+
+app.setAppUserModelId(APP_NAME);

@@ -67,3 +67,7 @@ body #app {
 .bg-darker {
   background-color: var(--bg-color-darker);
 }
+
+label {
+  user-select: none;  
+}

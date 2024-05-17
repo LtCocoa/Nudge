@@ -9,12 +9,12 @@
     >
 
     <label for="task-description">Description:</label>
-    <input
+    <textarea
       id="task-description"
       v-model="task.description"
-      class="input"
+      class="input max-h-60"
       type="text"
-    >
+    />
 
     <label for="task-schedule">Schedule:</label>
     <input
@@ -23,6 +23,16 @@
       class="input"
       type="datetime-local"
     >
+
+    <div>
+      <input
+        id="task-recurrency"
+        v-model="task.isRecurrent"
+        class="input"
+        type="checkbox"
+      >
+      <label for="task-recurrency" class="ml-2">Recurrent</label>
+    </div>
 
     <button
       type="button"

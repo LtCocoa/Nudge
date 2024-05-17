@@ -13,9 +13,23 @@ export class TaskScheduler {
   }
 
   scheduleTask(task) {
-    schedule.scheduleJob(task.uuid, task.date, () => {
-      new Notification({ title: `Task "${task.name}" is due!`, body: task.description }).show();
-    });
+    if (task.isRecurrent) {
+      const taskDate = new Date(task.date);
+
+      const rule = new schedule.RecurrenceRule();
+      rule.dayOfWeek = [new schedule.Range(1, 5)];
+      rule.hour = taskDate.getHours();
+      rule.minute = taskDate.getMinutes();
+
+      schedule.scheduleJob(task.uuid, rule, () => {
+        new Notification({ title: `Task "${task.name}" is due!`, body: task.description }).show();
+      });
+    } else {
+      schedule.scheduleJob(task.uuid, task.date, () => {
+        new Notification({ title: `Task "${task.name}" is due!`, body: task.description }).show();
+      });
+    }
+    console.log(schedule.scheduledJobs);
   }
 
   cancelTask({ uuid }) {
