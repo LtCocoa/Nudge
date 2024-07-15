@@ -15,22 +15,39 @@
         :key="index"
         class="flex flex-col"
       >
-        <div class="w-16 rounded-t-xl bg-red-400 flex justify-center items-center cursor-pointer p-1" @click="onDeleteTaskClick(task)">
-          <svg width="24" height="24" viewBox="0 0 800 800">
+        <div
+          class="w-16 rounded-t-xl bg-red-400 flex justify-center items-center cursor-pointer p-1"
+          @click="onDeleteTaskClick(task)"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 800 800"
+          >
             <use :xlink:href="`${BinIcon}#icon`" />
           </svg>
         </div>
         <div class="flex-1">
           <div class="px-2 bg-zinc-50 border-b flex flex-row justify-between items-center">
             <span>{{ task.name }}</span>
-            <div class="flex flex-row items-center gap-2 text-gray-500" v-if="task.date">
-              <svg width="15" height="15" viewBox="0 0 800 800">
+            <div
+              v-if="task.date"
+              class="flex flex-row items-center gap-2 text-gray-500"
+            >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 800 800"
+              >
                 <use :xlink:href="`${ClockIcon}#icon`" />
               </svg>
               <span>{{ formatDate(task.date) }}</span>
             </div>
           </div>
-          <div class="p-2 bg-zinc-50" v-if="task.description">
+          <div
+            v-if="task.description"
+            class="p-2 bg-zinc-50"
+          >
             {{ task.description }}
           </div>
         </div>
@@ -48,7 +65,11 @@
         New task
       </button>
     </template>
-    <CreateTask />
+
+    <template #default="{ onClose }">
+      <CreateTask @created="onClose" />
+    </template>
+
     <template #close-button="{ onClose }">
       <button
         class="btn mt-2"

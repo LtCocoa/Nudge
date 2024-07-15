@@ -17,7 +17,7 @@
           ref="modalContent"
           class="p-4 rounded-xl bg-standart shadow-xl w-96"
         >
-          <slot />
+          <slot :on-close="onClose" />
           <slot
             name="close-button"
             :on-close="onClose"
@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { ref } from 'vue';
 
 const isOpen = ref(false);
 const modalContent = ref(null);

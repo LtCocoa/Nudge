@@ -31,7 +31,10 @@
         class="input"
         type="checkbox"
       >
-      <label for="task-recurrency" class="ml-2">Recurrent</label>
+      <label
+        for="task-recurrency"
+        class="ml-2"
+      >Recurrent</label>
     </div>
 
     <button
@@ -45,10 +48,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 import { Task } from '../data/Task';
 import { useAppStore } from '../stores/Store';
 
+const emit = defineEmits(['created']);
 
 const store = useAppStore();
 const task = ref(new Task());
@@ -56,6 +60,7 @@ const task = ref(new Task());
 const onAddTaskClick = () => {
   store.addTask(task.value);
   task.value = new Task();
+  emit('created');
 };
 
 </script>

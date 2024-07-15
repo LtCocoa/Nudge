@@ -29,7 +29,6 @@ export class TaskScheduler {
         new Notification({ title: `Task "${task.name}" is due!`, body: task.description }).show();
       });
     }
-    console.log(schedule.scheduledJobs);
   }
 
   cancelTask({ uuid }) {
