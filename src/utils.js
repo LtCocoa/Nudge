@@ -112,11 +112,10 @@ export const fillMonth = (
 ) => {
   const firstDay = new Date(year, month, 1).getDay();
   const lastDay = new Date(year, month + 1, 0).getDay()
-  
+
   const totalDaysLastMonth = getDaysInMonth(year, month - 1);
   const totalDaysMonth = getDaysInMonth(year, month);
-  const totalDaysNextMonth = getDaysInMonth(year, month + 1);
-  
+
   const prevMonthDays = firstDay - 1 > -1 ? firstDay - 1 : 6;
   const nextMonthDays = 7 - lastDay;
 

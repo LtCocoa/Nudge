@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue';
+import { ref } from 'vue';
 import { Task } from '../data/Task';
 import { useAppStore } from '../stores/Store';
 
