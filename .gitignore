@@ -26,3 +26,5 @@ features.txt
 *.njsproj
 *.sln
 *.sw?
+
+out/
