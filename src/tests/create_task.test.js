@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { describe, test } from 'vitest';
+import { suite, test } from 'vitest';
 import CreateTask from '../components/CreateTask.vue';
 import { createTestingPinia } from '@pinia/testing';
 import { useAppStore } from '../stores/Store';
@@ -15,7 +15,7 @@ vi.mock('uuid', () => ({ v4: () => '00000000-0000-0000-0000-000000000000' }));
 
 const store = useAppStore();
 
-describe('Component works', () => {
+suite('Component works', () => {
   test('Component emits `Created` event', async () => {
     await wrapper.find('button').trigger('click');
     expect(wrapper.emitted()).toHaveProperty('created');

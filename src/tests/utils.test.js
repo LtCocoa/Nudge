@@ -1,8 +1,8 @@
-import { describe, expect, test } from "vitest";
+import { suite, expect, test } from "vitest";
 import { formatDate, fillMonth } from "../utils";
 
-describe('Date tests', () => {
-  test('Date is formatted', () => {
+suite('Date tests', () => {
+  test('Date is formatted as `dd.mm.yyyy hh:mm`', () => {
     expect(formatDate(new Date(2024, 7, 15, 22, 30, 15))).toBe(`15.07.2024 22:30`);
   });
 

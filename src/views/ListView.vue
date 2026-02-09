@@ -58,6 +58,7 @@
   <ModalWindow>
     <template #open-button="{ onOpen }">
       <button
+        id="open-button"
         class="btn"
         type="button"
         @click="onOpen"
@@ -72,6 +73,7 @@
 
     <template #close-button="{ onClose }">
       <button
+        id="close-button"
         class="btn mt-2"
         type="button"
         @click="onClose"

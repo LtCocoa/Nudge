@@ -3,6 +3,7 @@
     name="open-button"
     :on-open="onOpen"
   />
+
   <Teleport to="body">
     <Transition
       name="fade"

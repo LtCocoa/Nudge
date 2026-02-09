@@ -62,5 +62,4 @@ const onAddTaskClick = () => {
   task.value = new Task();
   emit('created');
 };
-
 </script>
