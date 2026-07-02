@@ -15,6 +15,7 @@ release
 *.local
 data
 features.txt
+out
 
 # Editor directories and files
 .vscode/*
