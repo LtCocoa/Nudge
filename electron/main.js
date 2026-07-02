@@ -11,6 +11,8 @@ const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const APP_NAME = 'Scheduler';
 
+app.setAppUserModelId(APP_NAME);
+
 // The built directory structure
 //
 // ├─┬─┬ dist
@@ -66,7 +68,7 @@ function createWindow() {
     },
   });
 
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {
@@ -110,7 +112,6 @@ app.on('activate', () => {
 });
 
 app.whenReady().then(() => {
-  createWindow();
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
@@ -133,8 +134,6 @@ app.whenReady().then(() => {
   tray.on('click', () => {
     win.show();
   });
+
+  createWindow();
 });
-
-
-
-app.setAppUserModelId(APP_NAME);

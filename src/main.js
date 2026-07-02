@@ -3,7 +3,6 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue';
 import { router } from './router';
-import { useAppStore } from './stores/Store';
 
 import './main.css';
 
@@ -17,11 +16,4 @@ createApp(App)
     window.ipcRenderer.on('main-process-message', (_event, message) => {
       console.log(message)
     });
-  });
-
-
-router.beforeEach((to, from) => {
-  if (useAppStore().currentProfile == null && to.name == 'profile') {
-    return { name: 'profiles' };
-  }
 });

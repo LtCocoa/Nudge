@@ -22,11 +22,19 @@ export class TaskScheduler {
       rule.minute = taskDate.getMinutes();
 
       schedule.scheduleJob(task.uuid, rule, () => {
-        new Notification({ title: `Task "${task.name}" is due!`, body: task.description }).show();
+        new Notification({
+          title: `Task "${task.name}" is due!`,
+          body: task.description,
+          silent: false,
+        }).show();
       });
     } else {
       schedule.scheduleJob(task.uuid, task.date, () => {
-        new Notification({ title: `Task "${task.name}" is due!`, body: task.description }).show();
+        new Notification({
+          title: `Task "${task.name}" is due!`,
+          body: task.description,
+          silent: false,
+        }).show();
       });
     }
   }
