@@ -38,13 +38,13 @@ const taskScheduler = new TaskScheduler();
 
 const getAppData = () => {
   try {
-    const result = JSON.parse(fs.readFileSync('data/data.json', 'utf-8'));
+    let appdata = JSON.parse(fs.readFileSync('data/data.json', 'utf-8'));
 
-    if (!result.tasks) {
-      result = initAppData();
+    if (!appdata.tasks) {
+      appdata = initAppData();
     }
 
-    return result;
+    return appdata;
   } catch (error) {
     return initAppData();
   }
