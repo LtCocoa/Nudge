@@ -1,38 +1,38 @@
 <template>
   <div class="flex flex-col text-xl gap-2">
-    <label for="task-name">Name:</label>
+    <label for="reminder-name">Name:</label>
     <input
-      id="task-name"
-      v-model="task.name"
+      id="reminder-name"
+      v-model="reminder.title"
       class="input"
       type="text"
     >
 
-    <label for="task-description">Description:</label>
+    <label for="reminder-description">Description:</label>
     <textarea
-      id="task-description"
-      v-model="task.description"
+      id="reminder-description"
+      v-model="reminder.description"
       class="input max-h-60"
       type="text"
     />
 
-    <label for="task-schedule">Schedule:</label>
+    <label for="reminder-schedule">Schedule:</label>
     <input
-      id="task-schedule"
-      v-model="task.date"
+      id="reminder-schedule"
+      v-model="reminder.date"
       class="input"
       type="datetime-local"
     >
 
     <div>
       <input
-        id="task-recurrency"
-        v-model="task.isRecurrent"
+        id="reminder-recurrency"
+        v-model="reminder.isRecurrent"
         class="input"
         type="checkbox"
       >
       <label
-        for="task-recurrency"
+        for="reminder-recurrency"
         class="ml-2"
       >Recurrent</label>
     </div>
@@ -40,7 +40,7 @@
     <button
       type="button"
       class="btn mt-10"
-      @click="onAddTaskClick"
+      @click="onAddreminderClick"
     >
       Add
     </button>
@@ -49,17 +49,17 @@
 
 <script setup>
 import { ref } from 'vue';
-import { Task } from '../data/Task';
+import { Reminder } from '../data/reminder';
 import { useAppStore } from '../stores/Store';
 
 const emit = defineEmits(['created']);
 
 const store = useAppStore();
-const task = ref(new Task());
+const reminder = ref(new Reminder());
 
-const onAddTaskClick = () => {
-  store.addTask(task.value);
-  task.value = new Task();
+const onAddreminderClick = () => {
+  store.addReminder(reminder.value);
+  reminder.value = new Reminder();
   emit('created');
 };
 </script>

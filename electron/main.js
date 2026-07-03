@@ -5,7 +5,8 @@ import path from 'node:path';
 import fs from 'fs';
 import { session } from 'electron';
 import { initAppData } from '../src/utils';
-import { TaskScheduler } from './TaskScheduler';
+import { ReminderScheduler } from './ReminderScheduler';
+import { reminderRepository } from './ReminderRepository';
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -13,18 +14,8 @@ const APP_NAME = 'Scheduler';
 
 app.setAppUserModelId(APP_NAME);
 
-// The built directory structure
-//
-// ├─┬─┬ dist
-// │ │ └── index.html
-// │ │
-// │ ├─┬ dist-electron
-// │ │ ├── main.js
-// │ │ └── preload.mjs
-// │
 process.env.APP_ROOT = path.join(__dirname, '..');
 
-// 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL'];
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron');
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
@@ -36,21 +27,7 @@ const pathToIcon = path.join(`${process.env.APP_ROOT}/src/assets`, 'alarm_clock.
 let win;
 let tray;
 
-const taskScheduler = new TaskScheduler();
-
-const getAppData = () => {
-  try {
-    let appdata = JSON.parse(fs.readFileSync('data/data.json', 'utf-8'));
-
-    if (!appdata.tasks) {
-      appdata = initAppData();
-    }
-
-    return appdata;
-  } catch (error) {
-    return initAppData();
-  }
-}
+const reminderScheduler = new ReminderScheduler();
 
 const closeApplication = () => {
   if (process.platform !== 'darwin') {
@@ -68,27 +45,27 @@ function createWindow() {
     },
   });
 
-  // win.webContents.openDevTools();
-
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', (new Date).toLocaleString());
   });
 
-  ipcMain.handle('save-file', (event, json) => {
-    return fs.writeFileSync('data/data.json', json);
+  ipcMain.handle('save-reminders', (event, json) => {
+    reminderRepository.saveReminders(json);
   });
 
-  ipcMain.handle('read-file', getAppData);
+  ipcMain.handle('get-reminders', () => {
+    return reminderRepository.getReminders();
+  });
 
-  ipcMain.on('schedule-task', (_, task) => {
-    taskScheduler.scheduleTask(task);
+  ipcMain.on('schedule-reminder', (a, reminder) => {
+    console.log(a, reminder);
+    reminderScheduler.scheduleReminder(reminder);
   });
 
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
   } else {
-    // win.loadFile('dist/index.html')
     win.loadFile(path.join(RENDERER_DIST, 'index.html'));
   }
 
@@ -120,8 +97,9 @@ app.whenReady().then(() => {
       }
     })
   });
-  const { tasks } = getAppData();
-  taskScheduler.initTasks(tasks);
+
+  const { reminders } = [];
+  reminderScheduler.initReminders(reminders);
 
   tray = new Tray(pathToIcon);
   const contextMenu = Menu.buildFromTemplate([

@@ -1,20 +1,22 @@
 import { toRaw } from "vue";
 
-export const saveAppData = (data) => {
-  return window.filesystem.saveFile(JSON.stringify(data));
+export const saveReminders = (reminders) => {
+  console.log(reminders);
+  return;
+  return window.reminders.saveAll(reminders);
 }
 
-export const readAppDataFile = () => {
-  return window.filesystem.readFile();
+export const getReminders = () => {
+  return window.reminders.getAll();
 }
 
-export const scheduleTask = (task) => {
-  window.tasks.scheduleTask(toRaw(task));
+export const scheduleReminder = (reminder) => {
+  window.reminderScheduler.schedule(reminder);
 }
 
 export const initAppData = () => {
   return {
-    tasks: [],
+    reminders: [],
   }
 }
 
