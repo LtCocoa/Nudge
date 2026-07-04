@@ -2,17 +2,13 @@
   <div class="h-full w-full bg-standart flex flex-col overflow-hidden">
     <div class="flex justify-start bg-darker">
       <div
-        class="nav-link p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
-        @click="switchView('list')"
+        v-for="(view, viewIndex) in views"
+        :key="viewIndex"
+        class="view-selector p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
+        :class="{ 'view-selector-active': currentView == view.component }"
+        @click="switchView(viewIndex)"
       >
-        Tasks
-      </div>
-
-      <div
-        class="nav-link p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
-        @click="switchView('calendar')"
-      >
-        Calendar
+        {{ view.title }}
       </div>
     </div>
 
@@ -28,16 +24,22 @@ import ListView from './views/ListView.vue';
 import CalendarView from './views/CalendarView.vue';
 import { shallowRef } from 'vue';
 
-const APP_VIEWS = {
-  list: ListView,
-  calendar: CalendarView,
-} as const;
+const views = [
+  {
+    component: ListView,
+    title: 'Reminders',
+  },
+  {
+    component: CalendarView,
+    title: 'Calendar'
+  },
+] as const;
 
 const store = useAppStore();
 const currentView = shallowRef(ListView);
 
-function switchView(view: keyof typeof APP_VIEWS) {
-  currentView.value = APP_VIEWS[view];
+function switchView(index: number) {
+  currentView.value = views[index].component;
 }
 
 store.getAppData();
@@ -45,11 +47,13 @@ store.getAppData();
 </script>
 
 <style>
-.nav-link {
+.view-selector {
   transition: background-color .1s ease-in-out;
+  cursor: pointer;
+  user-select: none;
 }
 
-.router-link-active {
+.view-selector-active {
   background-color: rgb(0, 135, 202);
   color: rgb(238, 242, 247);
 }
