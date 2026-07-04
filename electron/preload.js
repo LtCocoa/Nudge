@@ -1,7 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron';
-// import fs from 'fs';
 
-// --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
   on(...args) {
     const [channel, listener] = args
@@ -19,21 +17,19 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     const [channel, ...omit] = args
     return ipcRenderer.invoke(channel, ...omit)
   },
-
-  // You can expose other APTs you need here.
 });
 
-contextBridge.exposeInMainWorld('filesystem', {
-  'saveFile': (json) => {
-    return ipcRenderer.invoke('save-file', json);
+contextBridge.exposeInMainWorld('reminders', {
+  'save': (reminder) => {
+    return ipcRenderer.invoke('save-reminder', reminder);
   },
-  'readFile': () => {
-    return ipcRenderer.invoke('read-file');
+  'edit': (reminder) => {
+    return ipcRenderer.invoke('edit-reminder', reminder);
   },
-});
-
-contextBridge.exposeInMainWorld('tasks', {
-  'scheduleTask': (task) => {
-    return ipcRenderer.send('schedule-task', task);
+  'delete': (reminderId) => {
+    return ipcRenderer.invoke('delete-reminder', reminderId);
+  },
+  'getAll': () => {
+    return ipcRenderer.invoke('get-reminders');
   }
 });

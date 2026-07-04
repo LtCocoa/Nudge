@@ -1,37 +1,36 @@
 import { defineStore } from "pinia";
 import {
-  readAppDataFile,
-  saveAppData,
-  scheduleTask
+  getReminders,
+  saveReminder,
+  editReminder,
+  deleteReminder,
 } from "../utils";
-
+import { toRaw } from "vue";
 
 export const useAppStore = defineStore('app', {
   state: () => ({
-    tasks: []
+    reminders: []
   }),
   getters: {
-    sortedTasks: (state) => {
-      return state.tasks.sort((taskA, taskB) => new Date(taskA.date) - new Date(taskB.date));
+    sortedReminders: (state) => {
+      return state.reminders.sort((a, b) => new Date(a.date) - new Date(b.date));
     }
   },
   actions: {
     async getAppData() {
-      const { tasks } = await readAppDataFile();
-      this.tasks = tasks;
+      this.reminders = await getReminders();
     },
-    addTask(task) {
-      this.tasks.push(task);
+    addReminder(reminder) {
+      this.reminders.push(reminder); // должно быть выполнено после сохранения в JSON
 
-      if (task.date) {
-        scheduleTask(task);
+      saveReminder(reminder);
+    },
+    async deleteReminder(reminder) {
+      const deleted = await deleteReminder(reminder.id);
+      console.log(deleted);
+      if (deleted) {
+        this.reminders = this.reminders.filter(({ id }) => id != reminder.id);
       }
-
-      saveAppData({ tasks: this.tasks });
-    },
-    deleteTask(task) {
-      this.tasks = this.tasks.filter(({ uuid }) => uuid != task.uuid);
-      saveAppData({ tasks: this.tasks });
     }
   }
 });

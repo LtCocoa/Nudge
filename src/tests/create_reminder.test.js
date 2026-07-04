@@ -2,8 +2,8 @@ import { mount } from '@vue/test-utils';
 import { suite, test } from 'vitest';
 import CreateTask from '../components/CreateTask.vue';
 import { createTestingPinia } from '@pinia/testing';
-import { useAppStore } from '../stores/Store';
-import { Task } from '../data/Task';
+import { useAppStore } from '../stores/Store.js';
+import { Task } from '../data/Task.js';
 
 const wrapper = mount(CreateTask, {
   global: {
