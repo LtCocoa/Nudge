@@ -24,7 +24,7 @@
             height="24"
             viewBox="0 0 800 800"
           >
-            <!-- <use :xlink:href="`${BinIcon}#icon`" /> -->
+            <BinIcon />
           </svg>
         </div>
         <div class="flex-1">
@@ -39,7 +39,7 @@
                 height="15"
                 viewBox="0 0 800 800"
               >
-                <!-- <use :xlink:href="`${ClockIcon}#icon`" /> -->
+                 <ClockIcon />
               </svg>
               <span>{{ formatDate(reminder.date) }}</span>
             </div>
@@ -91,6 +91,8 @@ import ModalWindow from '../components/ModalWindow.vue';
 import CreateReminder from '../components/CreateReminder.vue';
 import { formatDate } from '../utils';
 import { Reminder } from '../../shared/models/Reminder';
+import ClockIcon from '@/assets/clock.svg';
+import BinIcon from '@/assets/bin.svg';
 
 const store = useAppStore();
 const hasReminders = computed(() => {
