@@ -2,11 +2,8 @@ import { app, BrowserWindow, ipcMain, Tray, Menu } from 'electron';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import fs from 'fs';
 import { session } from 'electron';
-import { initAppData } from '../src/utils';
-import { ReminderScheduler } from './ReminderScheduler';
-import { reminderRepository } from './ReminderRepository';
+import { reminderService } from './ReminderService';
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -26,8 +23,6 @@ const pathToIcon = path.join(`${process.env.APP_ROOT}/src/assets`, 'alarm_clock.
 
 let win;
 let tray;
-
-const reminderScheduler = new ReminderScheduler();
 
 const closeApplication = () => {
   if (process.platform !== 'darwin') {
@@ -50,17 +45,20 @@ function createWindow() {
     win?.webContents.send('main-process-message', (new Date).toLocaleString());
   });
 
-  ipcMain.handle('save-reminders', (event, json) => {
-    reminderRepository.saveReminders(json);
-  });
-
   ipcMain.handle('get-reminders', () => {
-    return reminderRepository.getReminders();
+    return reminderService.getAll();
   });
 
-  ipcMain.on('schedule-reminder', (a, reminder) => {
-    console.log(a, reminder);
-    reminderScheduler.scheduleReminder(reminder);
+  ipcMain.handle('save-reminder', (_, reminder) => {
+    reminderService.create(reminder);
+  });
+
+  ipcMain.handle('edit-reminder', (_, reminder) => {
+    reminderService.edit(reminder);
+  });
+
+  ipcMain.handle('delete-reminder', (_, reminderId) => {
+    return reminderService.delete(reminderId);
   });
 
   if (VITE_DEV_SERVER_URL) {
@@ -98,8 +96,7 @@ app.whenReady().then(() => {
     })
   });
 
-  const { reminders } = [];
-  reminderScheduler.initReminders(reminders);
+  reminderService.init();
 
   tray = new Tray(pathToIcon);
   const contextMenu = Menu.buildFromTemplate([

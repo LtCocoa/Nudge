@@ -1,23 +1,19 @@
 import { toRaw } from "vue";
 
-export const saveReminders = (reminders) => {
-  console.log(reminders);
-  return;
-  return window.reminders.saveAll(reminders);
-}
-
 export const getReminders = () => {
   return window.reminders.getAll();
 }
 
-export const scheduleReminder = (reminder) => {
-  window.reminderScheduler.schedule(reminder);
+export const saveReminder = reminder => {
+  return window.reminders.save(toRaw(reminder));
 }
 
-export const initAppData = () => {
-  return {
-    reminders: [],
-  }
+export const editReminder = reminder => {
+  return window.reminders.edit(reminder);
+}
+
+export const deleteReminder = reminderId => {
+  return window.reminders.delete(reminderId);
 }
 
 export const showNotification = (params = { title: 'Default title', body: 'default body' }, onclick = null) => {

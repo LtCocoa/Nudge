@@ -1,23 +1,37 @@
 import Store from 'electron-store';
 
 class ReminderRepository {
-  store = null;
+  store = new Store();
 
-  constructor() {
-    this.store = new Store();
+  create(reminder) {
+    this.store.appendToArray('reminders', reminder);
   }
 
-  saveReminders(reminders) {
-    this.store.set('reminders', JSON.stringify(reminders));
+  edit(reminder) {
+
   }
 
-  getReminders() {
+  delete(reminderId) {
+    const reminders = this.getAll();
+    const index = reminders.findIndex(reminder => reminder.id == reminderId);
+    const [removed] = reminders.splice(index, 1);
+
+    this.saveAll(reminders);
+
+    return removed;
+  }
+
+  saveAll(reminders) {
+    this.store.set('reminders', reminders);
+  }
+
+  getAll() {
     const reminders = this.store.get('reminders');
     if (!reminders) {
       this.store.set('reminders', []);
       return [];
     }
-    return JSON.parse(reminders);
+    return reminders;
   }
 }
 

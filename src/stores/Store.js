@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
 import {
   getReminders,
-  saveReminders,
-  scheduleReminder
+  saveReminder,
+  editReminder,
+  deleteReminder,
 } from "../utils";
 import { toRaw } from "vue";
 
@@ -20,17 +21,16 @@ export const useAppStore = defineStore('app', {
       this.reminders = await getReminders();
     },
     addReminder(reminder) {
-      this.reminders.push(reminder);
+      this.reminders.push(reminder); // должно быть выполнено после сохранения в JSON
 
-      if (reminder.date) {
-        scheduleReminder(toRaw(reminder));
-      }
-
-      saveReminders(toRaw(this.reminders));
+      saveReminder(reminder);
     },
-    deleteReminder(reminder) {
-      this.reminders = this.reminders.filter(({ id }) => id != reminder.id);
-      saveReminders(toRaw(this.reminders));
+    async deleteReminder(reminder) {
+      const deleted = await deleteReminder(reminder.id);
+      console.log(deleted);
+      if (deleted) {
+        this.reminders = this.reminders.filter(({ id }) => id != reminder.id);
+      }
     }
   }
 });

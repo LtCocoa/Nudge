@@ -20,16 +20,16 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 });
 
 contextBridge.exposeInMainWorld('reminders', {
-  'saveAll': (json) => {
-    return ipcRenderer.invoke('save-reminders', json);
+  'save': (reminder) => {
+    return ipcRenderer.invoke('save-reminder', reminder);
+  },
+  'edit': (reminder) => {
+    return ipcRenderer.invoke('edit-reminder', reminder);
+  },
+  'delete': (reminderId) => {
+    return ipcRenderer.invoke('delete-reminder', reminderId);
   },
   'getAll': () => {
     return ipcRenderer.invoke('get-reminders');
-  },
-});
-
-contextBridge.exposeInMainWorld('reminderScheduler', {
-  'schedule': (reminder) => {
-    return ipcRenderer.send('schedule-reminder', reminder);
   }
 });
