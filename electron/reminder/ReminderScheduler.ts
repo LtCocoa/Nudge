@@ -1,8 +1,9 @@
 import schedule from 'node-schedule';
 import { Notification } from 'electron';
+import { Reminder } from './Reminder';
 
 class ReminderScheduler {
-  init(reminders = []) {
+  init(reminders: Reminder[] = []) {
     reminders.forEach(reminder => {
       if (reminder.date) {
         this.schedule(reminder);
@@ -10,8 +11,8 @@ class ReminderScheduler {
     });
   }
 
-  schedule(reminder) {
-    let spec;
+  schedule(reminder: Reminder) {
+    let spec: schedule.Spec;
 
     if (reminder.isRecurrent) {
       const reminderDate = new Date(reminder.date);
@@ -33,7 +34,7 @@ class ReminderScheduler {
     });
   }
 
-  cancel(reminderId) {
+  cancel(reminderId: string) {
     schedule.cancelJob(reminderId);
   }
 }

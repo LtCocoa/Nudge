@@ -1,11 +1,9 @@
 import { app, BrowserWindow, ipcMain, Tray, Menu } from 'electron';
-import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { session } from 'electron';
-import { reminderService } from './ReminderService';
+import { reminderService } from './reminder/ReminderService';
 
-const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const APP_NAME = 'Scheduler';
 
@@ -21,8 +19,8 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 
 
 const pathToIcon = path.join(`${process.env.APP_ROOT}/src/assets`, 'alarm_clock.png');
 
-let win;
-let tray;
+let win: BrowserWindow;
+let tray: Tray;
 
 const closeApplication = () => {
   if (process.platform !== 'darwin') {

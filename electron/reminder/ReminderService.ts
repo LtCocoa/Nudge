@@ -1,5 +1,6 @@
 import { reminderScheduler } from "./ReminderScheduler";
 import { reminderRepository } from "./ReminderRepository";
+import { Reminder } from "./Reminder";
 
 class ReminderService {
   init() {
@@ -10,16 +11,16 @@ class ReminderService {
     return reminderRepository.getAll();
   }
 
-  create(reminder) {
+  create(reminder: Reminder) {
     reminderRepository.create(reminder);
     reminderScheduler.schedule(reminder);
   }
 
-  edit(reminder) {
+  edit(reminder: Reminder) {
     // todo
   }
 
-  delete(reminderId) {
+  delete(reminderId: string) {
     reminderScheduler.cancel(reminderId);
     return reminderRepository.delete(reminderId);
   }
