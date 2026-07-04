@@ -1,32 +1,14 @@
 import { ipcRenderer, contextBridge } from 'electron';
-
-contextBridge.exposeInMainWorld('ipcRenderer', {
-  on(...args) {
-    const [channel, listener] = args
-    return ipcRenderer.on(channel, (event, ...args) => listener(event, ...args))
-  },
-  off(...args) {
-    const [channel, ...omit] = args
-    return ipcRenderer.off(channel, ...omit)
-  },
-  send(...args) {
-    const [channel, ...omit] = args
-    return ipcRenderer.send(channel, ...omit)
-  },
-  invoke(...args) {
-    const [channel, ...omit] = args
-    return ipcRenderer.invoke(channel, ...omit)
-  },
-});
+import { Reminder } from './reminder/Reminder';
 
 contextBridge.exposeInMainWorld('reminders', {
-  'save': (reminder) => {
+  'save': (reminder: Reminder) => {
     return ipcRenderer.invoke('save-reminder', reminder);
   },
-  'edit': (reminder) => {
+  'edit': (reminder: Reminder) => {
     return ipcRenderer.invoke('edit-reminder', reminder);
   },
-  'delete': (reminderId) => {
+  'delete': (reminderId: string) => {
     return ipcRenderer.invoke('delete-reminder', reminderId);
   },
   'getAll': () => {
