@@ -1,6 +1,6 @@
 import { reminderScheduler } from "./ReminderScheduler";
 import { reminderRepository } from "./ReminderRepository";
-import { Reminder } from "./Reminder";
+import { Reminder } from "../../shared/models/Reminder";
 
 class ReminderService {
   init() {

@@ -10,5 +10,5 @@
   "include": [
     "src",
     "electron"
-  ]
+, "shared/models/Reminder.ts"  ]
 }

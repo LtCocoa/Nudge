@@ -1,5 +1,5 @@
 import Store from 'electron-store';
-import { Reminder } from './Reminder';
+import { Reminder } from '../../shared/models/Reminder';
 
 interface StoreSchema {
   reminders: Reminder[],

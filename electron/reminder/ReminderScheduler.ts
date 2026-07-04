@@ -1,6 +1,6 @@
 import schedule from 'node-schedule';
 import { Notification } from 'electron';
-import { Reminder } from './Reminder';
+import { Reminder } from '../../shared/models/Reminder';
 
 class ReminderScheduler {
   init(reminders: Reminder[] = []) {

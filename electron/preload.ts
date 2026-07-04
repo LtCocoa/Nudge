@@ -1,5 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron';
-import { Reminder } from './reminder/Reminder';
+import { Reminder } from '../shared/models/Reminder';
 
 contextBridge.exposeInMainWorld('reminders', {
   'save': (reminder: Reminder) => {

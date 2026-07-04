@@ -1,8 +1,9 @@
-import { app, BrowserWindow, ipcMain, Tray, Menu } from 'electron';
+import { app, BrowserWindow, Tray, Menu } from 'electron';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { session } from 'electron';
 import { reminderService } from './reminder/ReminderService';
+import { registerReminderHandlers } from './ipc/reminder';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const APP_NAME = 'Scheduler';
@@ -43,21 +44,7 @@ function createWindow() {
     win?.webContents.send('main-process-message', (new Date).toLocaleString());
   });
 
-  ipcMain.handle('get-reminders', () => {
-    return reminderService.getAll();
-  });
-
-  ipcMain.handle('save-reminder', (_, reminder) => {
-    reminderService.create(reminder);
-  });
-
-  ipcMain.handle('edit-reminder', (_, reminder) => {
-    reminderService.edit(reminder);
-  });
-
-  ipcMain.handle('delete-reminder', (_, reminderId) => {
-    return reminderService.delete(reminderId);
-  });
+  registerReminderHandlers();
 
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
