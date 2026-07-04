@@ -1,46 +1,46 @@
 <template>
   <div class="h-full w-full bg-standart flex flex-col overflow-hidden">
     <div class="flex justify-start bg-darker">
-      <RouterLink
-        to="/tasks"
+      <div
         class="nav-link p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
+        @click="switchView('list')"
       >
         Tasks
-      </RouterLink>
+      </div>
 
-      <RouterLink
-        to="/calendar"
+      <div
         class="nav-link p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
+        @click="switchView('calendar')"
       >
         Calendar
-      </RouterLink>
+      </div>
     </div>
 
-    <RouterView v-slot="{ Component }">
-      <template v-if="Component">
-        <Suspense>
-          <div class="flex flex-col flex-1 overflow-auto p-4">
-            <component :is="Component" />
-          </div>
-          <template #fallback>
-            loading...
-          </template>
-        </Suspense>
-      </template>
-    </RouterView>
+    <div class="flex flex-col flex-1 overflow-auto p-4">
+      <component :is="currentView" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useAppStore } from './stores/Store';
-import { useRouter } from 'vue-router';
+import ListView from './views/ListView.vue';
+import CalendarView from './views/CalendarView.vue';
+import { shallowRef } from 'vue';
+
+const APP_VIEWS = {
+  list: ListView,
+  calendar: CalendarView,
+} as const;
 
 const store = useAppStore();
-const router = useRouter();
+const currentView = shallowRef(ListView);
 
-store.getAppData().then(() => {
-  router.push({ name: 'tasks' });
-});
+function switchView(view: keyof typeof APP_VIEWS) {
+  currentView.value = APP_VIEWS[view];
+}
+
+store.getAppData();
 
 </script>
 
