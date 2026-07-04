@@ -55,7 +55,7 @@ export const formatDate = (rawDate: Date) => {
     minutes,
   ] = [
     addZero(date.getDate()),
-    addZero(date.getMonth()),
+    addZero(date.getMonth() + 1),
     date.getFullYear(),
     addZero(date.getHours()),
     addZero(date.getMinutes()),

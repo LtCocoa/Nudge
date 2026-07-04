@@ -1,12 +1,10 @@
 <template>
-  <p class="text-xl">
-    Reminders:
-  </p>
   <div v-if="!hasReminders">
     <span>
       There are no reminders yet.
     </span>
   </div>
+
   <div class="my-3 overflow-y-scroll shadow-inner flex-1">
     <ul class="leading-7 flex flex-col gap-2 overflow-y-auto drop-shadow-md">
       <li
@@ -19,14 +17,9 @@
           class="w-16 rounded-t-xl bg-red-400 flex justify-center items-center cursor-pointer p-1"
           @click="onDeleteReminderClick(reminder)"
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 800 800"
-          >
-            <BinIcon />
-          </svg>
+          <BinIcon class="icon" />
         </div>
+
         <div class="flex-1">
           <div class="px-2 bg-zinc-50 border-b flex flex-row justify-between items-center">
             <span>{{ reminder.title }}</span>
@@ -34,16 +27,11 @@
               v-if="reminder.date"
               class="flex flex-row items-center gap-2 text-gray-500"
             >
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 800 800"
-              >
-                 <ClockIcon />
-              </svg>
+              <ClockIcon class="icon" />
               <span>{{ formatDate(reminder.date) }}</span>
             </div>
           </div>
+
           <div
             v-if="reminder.description"
             class="p-2 bg-zinc-50"
@@ -95,6 +83,7 @@ import ClockIcon from '@/assets/clock.svg';
 import BinIcon from '@/assets/bin.svg';
 
 const store = useAppStore();
+
 const hasReminders = computed(() => {
   return store.reminders?.length > 0;
 });
@@ -104,3 +93,10 @@ const onDeleteReminderClick = (reminder: Reminder) => {
 }
 
 </script>
+
+<style scoped>
+.icon {
+  height: 20px;
+  width: 20px;
+}
+</style>
