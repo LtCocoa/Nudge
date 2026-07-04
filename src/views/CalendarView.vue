@@ -42,7 +42,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
 import { fillMonth, days, months } from '../utils';
 
@@ -52,11 +52,11 @@ const calendarDates = computed(() => {
   return fillMonth(date.value.getFullYear(), date.value.getMonth());
 });
 
-const onClick = (val) => {
+const onClick = (val: number) => {
   date.value = new Date(date.value.setMonth(date.value.getMonth() + val));
 }
 
-const onDateClick = (calendarDate) => {
+const onDateClick = (calendarDate: Date) => {
   console.log(calendarDate);
 }
 </script>

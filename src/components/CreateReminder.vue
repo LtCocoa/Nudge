@@ -47,19 +47,20 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
-import { Reminder } from '../data/reminder';
 import { useAppStore } from '../stores/Store';
+import { Reminder } from '../../shared/models/Reminder';
+import { createReminder } from '../utils';
 
 const emit = defineEmits(['created']);
 
 const store = useAppStore();
-const reminder = ref(new Reminder());
+const reminder = ref<Reminder>(createReminder());
 
 const onAddreminderClick = () => {
   store.addReminder(reminder.value);
-  reminder.value = new Reminder();
+  reminder.value = createReminder();
   emit('created');
 };
 </script>

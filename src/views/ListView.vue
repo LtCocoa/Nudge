@@ -24,7 +24,7 @@
             height="24"
             viewBox="0 0 800 800"
           >
-            <use :xlink:href="`${BinIcon}#icon`" />
+            <!-- <use :xlink:href="`${BinIcon}#icon`" /> -->
           </svg>
         </div>
         <div class="flex-1">
@@ -39,7 +39,7 @@
                 height="15"
                 viewBox="0 0 800 800"
               >
-                <use :xlink:href="`${ClockIcon}#icon`" />
+                <!-- <use :xlink:href="`${ClockIcon}#icon`" /> -->
               </svg>
               <span>{{ formatDate(reminder.date) }}</span>
             </div>
@@ -84,21 +84,20 @@
   </ModalWindow>
 </template>
 
-<script setup>
-import { useAppStore } from '@/stores/Store';
+<script setup lang="ts">
+import { useAppStore } from '../stores/Store';
 import { computed } from 'vue';
-import ModalWindow from '@/components/ModalWindow.vue';
-import CreateReminder from '@/components/CreateReminder.vue';
-import ClockIcon from '@/assets/clock.svg';
-import BinIcon from '@/assets/bin.svg';
-import { formatDate } from '@/utils';
+import ModalWindow from '../components/ModalWindow.vue';
+import CreateReminder from '../components/CreateReminder.vue';
+import { formatDate } from '../utils';
+import { Reminder } from '../../shared/models/Reminder';
 
 const store = useAppStore();
 const hasReminders = computed(() => {
   return store.reminders?.length > 0;
 });
 
-const onDeleteReminderClick = (reminder) => {
+const onDeleteReminderClick = (reminder: Reminder) => {
   store.deleteReminder(reminder);
 }
 

@@ -5,27 +5,31 @@ import {
   editReminder,
   deleteReminder,
 } from "../utils";
-import { toRaw } from "vue";
+import { Reminder } from "../../shared/models/Reminder";
+
+interface State {
+  reminders: Reminder[];
+}
 
 export const useAppStore = defineStore('app', {
-  state: () => ({
+  state: (): State => ({
     reminders: []
   }),
   getters: {
     sortedReminders: (state) => {
-      return state.reminders.sort((a, b) => new Date(a.date) - new Date(b.date));
+      return state.reminders.sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date)));
     }
   },
   actions: {
     async getAppData() {
       this.reminders = await getReminders();
     },
-    addReminder(reminder) {
+    addReminder(reminder: Reminder) {
       this.reminders.push(reminder); // должно быть выполнено после сохранения в JSON
 
       saveReminder(reminder);
     },
-    async deleteReminder(reminder) {
+    async deleteReminder(reminder: Reminder) {
       const deleted = await deleteReminder(reminder.id);
       console.log(deleted);
       if (deleted) {

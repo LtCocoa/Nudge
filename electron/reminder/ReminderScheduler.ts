@@ -1,8 +1,9 @@
 import schedule from 'node-schedule';
 import { Notification } from 'electron';
+import { Reminder } from '../../shared/models/Reminder';
 
 class ReminderScheduler {
-  init(reminders = []) {
+  init(reminders: Reminder[] = []) {
     reminders.forEach(reminder => {
       if (reminder.date) {
         this.schedule(reminder);
@@ -10,8 +11,10 @@ class ReminderScheduler {
     });
   }
 
-  schedule(reminder) {
-    let spec;
+  schedule(reminder: Reminder) {
+    if (!reminder.date) throw new Error('Reminder must have a date to schedule it');
+
+    let spec: schedule.Spec;
 
     if (reminder.isRecurrent) {
       const reminderDate = new Date(reminder.date);
@@ -25,15 +28,17 @@ class ReminderScheduler {
     }
 
     schedule.scheduleJob(reminder.id, spec, () => {
-      new Notification({
+      const notification = new Notification({
         title: reminder.title,
         body: reminder.description,
         silent: false,
-      }).show();
+      });
+      // todo - открыть окно приложения и показать напоминалку по клику на уведомление
+      notification.show();
     });
   }
 
-  cancel(reminderId) {
+  cancel(reminderId: string) {
     schedule.cancelJob(reminderId);
   }
 }

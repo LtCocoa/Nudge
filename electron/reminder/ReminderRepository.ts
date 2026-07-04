@@ -1,19 +1,24 @@
 import Store from 'electron-store';
+import { Reminder } from '../../shared/models/Reminder';
+
+interface StoreSchema {
+  reminders: Reminder[],
+}
 
 class ReminderRepository {
-  store = new Store();
+  store = new Store<StoreSchema>();
 
-  create(reminder) {
+  create(reminder: Reminder) {
     this.store.appendToArray('reminders', reminder);
   }
 
-  edit(reminder) {
+  edit(reminder: Reminder) {
 
   }
 
-  delete(reminderId) {
+  delete(reminderId: string) {
     const reminders = this.getAll();
-    const index = reminders.findIndex(reminder => reminder.id == reminderId);
+    const index = reminders.findIndex(reminder => reminder.id === reminderId);
     const [removed] = reminders.splice(index, 1);
 
     this.saveAll(reminders);
@@ -21,7 +26,7 @@ class ReminderRepository {
     return removed;
   }
 
-  saveAll(reminders) {
+  saveAll(reminders: Reminder[]) {
     this.store.set('reminders', reminders);
   }
 

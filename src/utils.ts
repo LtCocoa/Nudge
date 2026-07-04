@@ -1,18 +1,30 @@
 import { toRaw } from "vue";
+import { Reminder } from "../shared/models/Reminder";
+import { v4 as uuid } from "uuid";
+
+export function createReminder(): Reminder {
+  return {
+    id: uuid(),
+    title: '',
+    description: '',
+    date: null,
+    isRecurrent: false,
+  }
+}
 
 export const getReminders = () => {
   return window.reminders.getAll();
 }
 
-export const saveReminder = reminder => {
+export const saveReminder = (reminder: Reminder) => {
   return window.reminders.save(toRaw(reminder));
 }
 
-export const editReminder = reminder => {
+export const editReminder = (reminder: Reminder) => {
   return window.reminders.edit(reminder);
 }
 
-export const deleteReminder = reminderId => {
+export const deleteReminder = (reminderId: string) => {
   return window.reminders.delete(reminderId);
 }
 
@@ -20,18 +32,18 @@ export const showNotification = (params = { title: 'Default title', body: 'defau
   new window.Notification(params.title, { body: params.body }).onclick = onclick;
 }
 
-export const scrollElementIntoView = (id) => {
-  document.getElementById(id).scrollIntoView();
+export const scrollElementIntoView = (id: string) => {
+  document.getElementById(id)?.scrollIntoView();
 }
 
-export const formatDate = (rawDate) => {
+export const formatDate = (rawDate: Date) => {
   const date = new Date(rawDate);
 
-  if (date == 'Invalid Date') {
+  if (!(date instanceof Date)) {
     return '';
   }
 
-  const addZero = (number) => {
+  const addZero = (number: number) => {
     return number < 10 ? `0${number}` : number;
   };
 
@@ -98,7 +110,7 @@ export const months = [
   'December',
 ];
 
-const getDaysInMonth = (year, month) => {
+const getDaysInMonth = (year: number, month: number) => {
   const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
 
   return lastDayOfMonth;
