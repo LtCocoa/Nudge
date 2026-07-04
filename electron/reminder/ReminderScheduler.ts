@@ -12,6 +12,8 @@ class ReminderScheduler {
   }
 
   schedule(reminder: Reminder) {
+    if (!reminder.date) throw new Error('Reminder must have a date to schedule it');
+
     let spec: schedule.Spec;
 
     if (reminder.isRecurrent) {
@@ -26,11 +28,13 @@ class ReminderScheduler {
     }
 
     schedule.scheduleJob(reminder.id, spec, () => {
-      new Notification({
+      const notification = new Notification({
         title: reminder.title,
         body: reminder.description,
         silent: false,
-      }).show();
+      });
+      // todo - открыть окно приложения и показать напоминалку по клику на уведомление
+      notification.show();
     });
   }
 

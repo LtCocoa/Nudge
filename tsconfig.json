@@ -9,6 +9,7 @@
   },
   "include": [
     "src",
-    "electron"
-, "shared/models/Reminder.ts"  ]
+    "electron",
+    "shared/models/Reminder.ts",
+  ]
 }
