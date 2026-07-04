@@ -1,55 +1,59 @@
 <template>
   <div class="h-full w-full bg-standart flex flex-col overflow-hidden">
     <div class="flex justify-start bg-darker">
-      <RouterLink
-        to="/tasks"
-        class="nav-link p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
+      <div
+        v-for="(view, viewIndex) in views"
+        :key="viewIndex"
+        class="view-selector p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
+        :class="{ 'view-selector-active': currentView == view.component }"
+        @click="switchView(viewIndex)"
       >
-        Tasks
-      </RouterLink>
-
-      <RouterLink
-        to="/calendar"
-        class="nav-link p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
-      >
-        Calendar
-      </RouterLink>
+        {{ view.title }}
+      </div>
     </div>
 
-    <RouterView v-slot="{ Component }">
-      <template v-if="Component">
-        <Suspense>
-          <div class="flex flex-col flex-1 overflow-auto p-4">
-            <component :is="Component" />
-          </div>
-          <template #fallback>
-            loading...
-          </template>
-        </Suspense>
-      </template>
-    </RouterView>
+    <div class="flex flex-col flex-1 overflow-auto p-4">
+      <component :is="currentView" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useAppStore } from './stores/Store';
-import { useRouter } from 'vue-router';
+import ListView from './views/ListView.vue';
+import CalendarView from './views/CalendarView.vue';
+import { shallowRef } from 'vue';
+
+const views = [
+  {
+    component: ListView,
+    title: 'Reminders',
+  },
+  {
+    component: CalendarView,
+    title: 'Calendar'
+  },
+] as const;
 
 const store = useAppStore();
-const router = useRouter();
+const currentView = shallowRef(ListView);
 
-store.getAppData().then(() => {
-  router.push({ name: 'tasks' });
-});
+function switchView(index: number) {
+  currentView.value = views[index].component;
+}
+
+store.getAppData();
 
 </script>
 
 <style>
-.nav-link {
+.view-selector {
   transition: background-color .1s ease-in-out;
+  cursor: pointer;
+  user-select: none;
 }
 
-.router-link-active {
+.view-selector-active {
   background-color: rgb(0, 135, 202);
   color: rgb(238, 242, 247);
 }
