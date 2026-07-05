@@ -5,7 +5,7 @@
     </span>
   </div>
 
-  <div class="my-3 overflow-y-scroll flex-1 flex flex-col gap-2 ">
+  <div class="my-3 overflow-y-scroll flex-1 flex flex-col gap-2 px-4">
     <ReminderItem
       v-for="reminder in store.sortedReminders"
       :key="reminder.id"
@@ -48,20 +48,12 @@ import { computed } from 'vue';
 import ModalWindow from '../components/ModalWindow.vue';
 import CreateReminder from '../components/CreateReminder.vue';
 import ReminderItem from '../components/ReminderItem.vue';
-import { formatFullDate } from '../utils';
-import { Reminder } from '../../shared/models/Reminder';
-import ClockIcon from '@/assets/clock.svg';
-import BinIcon from '@/assets/bin.svg';
 
 const store = useAppStore();
 
 const hasReminders = computed(() => {
   return store.reminders?.length > 0;
 });
-
-const onDeleteReminderClick = (reminder: Reminder) => {
-  store.deleteReminder(reminder);
-}
 
 </script>
 

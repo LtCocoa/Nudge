@@ -14,10 +14,6 @@
 html {
   height: 100svh;
   width: 100svw;
-
-  --bg-color: #eeeeee;
-  --bg-color-darker: #cecece;
-  --fg-color: #cacaca;
 }
 
 html * {

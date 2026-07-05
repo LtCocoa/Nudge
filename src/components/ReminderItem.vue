@@ -1,6 +1,6 @@
 <template>
-  <div class="reminder-container">
-    <div class="flex flex-1 flex-col min-w-72">
+  <div class="reminder-container gap-3">
+    <div class="flex flex-1 flex-col min-w-72 overflow-hidden">
       <div class="font-medium">
         {{ reminder.title }}
       </div>
@@ -16,15 +16,16 @@
       <div class="p-2 bg-neutral-300 text-gray-950-700 rounded-md font-medium">
         {{ formatDate(reminder.date) }}
       </div>
-      <div class="p-2 bg-violet-200 text-violet-700 rounded-md font-medium">
-        {{ formatTime(reminder.date) }}
+      <div class="p-2 bg-violet-200 text-violet-700 rounded-md font-medium flex gap-1 cursor-pointer">
+        <AlarmClock :size="23" />
+        <span>{{ formatTime(reminder.date) }}</span>
       </div>
     </div>
     <div
-      class="reminder-delete-button"
+      class="reminder-delete"
       @click="store.deleteReminder(reminder)"
     >
-      &#215
+      <Trash2 :size="20" />
     </div>
   </div>
 </template>
@@ -33,29 +34,22 @@
 import { Reminder } from '../../shared/models/Reminder';
 import { useAppStore } from '../stores/Store';
 import { formatDate, formatTime } from '../utils';
-
-const store = useAppStore();
-
+import { AlarmClock, Trash2 } from '@lucide/vue';
 
 export interface ReminderItemProps {
   reminder: Reminder;
 }
 
+const store = useAppStore();
 const props = defineProps<ReminderItemProps>();
 </script>
 
 <style scoped>
 .reminder-container {
-  @apply rounded-md border-2 border-gray-200 flex mr-2 items-center py-3 px-5 cursor-default relative;
-
-  .reminder-delete-button {
-    @apply absolute top-[-10px] right-[-10px] bg-red-400 rounded-full w-5 h-5 flex items-center justify-center opacity-0 cursor-pointer transition-opacity;
-  }
+  @apply flex rounded-md border-2 border-gray-200 mr-2 items-center py-3 px-5 cursor-default relative;
 }
 
-.reminder-container:hover .reminder-delete-button {
-  @apply opacity-100;
+.reminder-delete {
+  @apply cursor-pointer text-red-700;
 }
-
-
 </style>

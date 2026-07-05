@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full bg-standart flex flex-col overflow-hidden">
+  <div class="h-full w-full flex flex-col overflow-hidden">
     <div class="flex justify-start bg-darker">
       <div
         v-for="(view, viewIndex) in views"
