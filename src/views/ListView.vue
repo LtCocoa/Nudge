@@ -5,42 +5,12 @@
     </span>
   </div>
 
-  <div class="my-3 overflow-y-scroll shadow-inner flex-1">
-    <ul class="leading-7 flex flex-col gap-2 overflow-y-auto drop-shadow-md">
-      <li
-        v-for="(reminder) in store.sortedReminders"
-        :id="reminder.id"
-        :key="reminder.id"
-        class="flex flex-col"
-      >
-        <div
-          class="w-16 rounded-t-xl bg-red-400 flex justify-center items-center cursor-pointer p-1"
-          @click="onDeleteReminderClick(reminder)"
-        >
-          <BinIcon class="icon" />
-        </div>
-
-        <div class="flex-1">
-          <div class="px-2 bg-zinc-50 border-b flex flex-row justify-between items-center">
-            <span>{{ reminder.title }}</span>
-            <div
-              v-if="reminder.date"
-              class="flex flex-row items-center gap-2 text-gray-500"
-            >
-              <ClockIcon class="icon" />
-              <span>{{ formatDate(reminder.date) }}</span>
-            </div>
-          </div>
-
-          <div
-            v-if="reminder.description"
-            class="p-2 bg-zinc-50"
-          >
-            {{ reminder.description }}
-          </div>
-        </div>
-      </li>
-    </ul>
+  <div class="my-3 overflow-y-scroll flex-1 flex flex-col gap-2 ">
+    <ReminderItem
+      v-for="reminder in store.sortedReminders"
+      :key="reminder.id"
+      :reminder
+    />
   </div>
 
   <ModalWindow>
@@ -77,7 +47,8 @@ import { useAppStore } from '../stores/Store';
 import { computed } from 'vue';
 import ModalWindow from '../components/ModalWindow.vue';
 import CreateReminder from '../components/CreateReminder.vue';
-import { formatDate } from '../utils';
+import ReminderItem from '../components/ReminderItem.vue';
+import { formatFullDate } from '../utils';
 import { Reminder } from '../../shared/models/Reminder';
 import ClockIcon from '@/assets/clock.svg';
 import BinIcon from '@/assets/bin.svg';

@@ -59,7 +59,7 @@ const store = useAppStore();
 const reminder = ref<Reminder>(createReminder());
 
 const onAddreminderClick = () => {
-  store.addReminder(reminder.value);
+  store.createReminder(reminder.value);
   reminder.value = createReminder();
   emit('created');
 };

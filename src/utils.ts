@@ -1,4 +1,3 @@
-import { toRaw } from "vue";
 import { Reminder } from "../shared/models/Reminder";
 import { v4 as uuid } from "uuid";
 
@@ -12,56 +11,31 @@ export function createReminder(): Reminder {
   }
 }
 
-export const getReminders = () => {
-  return window.reminders.getAll();
-}
-
-export const saveReminder = (reminder: Reminder) => {
-  return window.reminders.save(toRaw(reminder));
-}
-
-export const editReminder = (reminder: Reminder) => {
-  return window.reminders.edit(reminder);
-}
-
-export const deleteReminder = (reminderId: string) => {
-  return window.reminders.delete(reminderId);
-}
-
-export const showNotification = (params = { title: 'Default title', body: 'default body' }, onclick = null) => {
-  new window.Notification(params.title, { body: params.body }).onclick = onclick;
-}
-
 export const scrollElementIntoView = (id: string) => {
   document.getElementById(id)?.scrollIntoView();
+}
+
+export const formatTime = (rawDate: Date) => {
+  const date = new Date(rawDate);
+
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${hours}:${minutes}`;
 }
 
 export const formatDate = (rawDate: Date) => {
   const date = new Date(rawDate);
 
-  if (!(date instanceof Date)) {
-    return '';
-  }
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
 
-  const addZero = (number: number) => {
-    return number < 10 ? `0${number}` : number;
-  };
+  return `${day}.${month}.${year}`;
+}
 
-  const [
-    day,
-    month,
-    year,
-    hours,
-    minutes,
-  ] = [
-    addZero(date.getDate()),
-    addZero(date.getMonth() + 1),
-    date.getFullYear(),
-    addZero(date.getHours()),
-    addZero(date.getMinutes()),
-  ];
-
-  return `${day}.${month}.${year} ${hours}:${minutes}`;
+export const formatFullDate = (rawDate: Date) => {
+  return `${formatDate(rawDate)} ${formatTime(rawDate)}`;
 }
 
 export const days = [

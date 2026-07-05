@@ -13,7 +13,9 @@ class ReminderService {
 
   create(reminder: Reminder) {
     reminderRepository.create(reminder);
-    reminderScheduler.schedule(reminder);
+    if (reminder.date) {
+      reminderScheduler.schedule(reminder);
+    }
   }
 
   edit(reminder: Reminder) {

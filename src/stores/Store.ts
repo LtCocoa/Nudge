@@ -1,10 +1,5 @@
 import { defineStore } from "pinia";
-import {
-  getReminders,
-  saveReminder,
-  editReminder,
-  deleteReminder,
-} from "../utils";
+import { reminderApi } from "../api/reminder";
 import { Reminder } from "../../shared/models/Reminder";
 
 interface State {
@@ -22,18 +17,18 @@ export const useAppStore = defineStore('app', {
   },
   actions: {
     async getAppData() {
-      this.reminders = await getReminders();
+      this.reminders = await reminderApi.getAll();
     },
-    addReminder(reminder: Reminder) {
+    createReminder(reminder: Reminder) {
       this.reminders.push(reminder); // должно быть выполнено после сохранения в JSON
 
-      saveReminder(reminder);
+      reminderApi.create(reminder);
     },
     async deleteReminder(reminder: Reminder) {
-      const deleted = await deleteReminder(reminder.id);
-      console.log(deleted);
+      const deleted = await reminderApi.delete(reminder.id);
       if (deleted) {
-        this.reminders = this.reminders.filter(({ id }) => id != reminder.id);
+        const index = this.reminders.findIndex(reminder => reminder.id === deleted.id);
+        this.reminders.splice(index, 1);
       }
     }
   }
