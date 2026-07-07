@@ -1,13 +1,15 @@
 <template>
   <div v-if="!hasReminders">
-    <span>
-      There are no reminders yet.
-    </span>
+    <span>There are no reminders yet.</span>
+  </div>
+  <div v-else>
+    <div>All reminders</div>
+    <div>{{ reminderCountText }}</div>
   </div>
 
   <div class="my-3 overflow-y-scroll flex-1 flex flex-col gap-2 px-4">
     <ReminderItem
-      v-for="reminder in store.sortedReminders"
+      v-for="reminder in reminders.sorted"
       :key="reminder.id"
       :reminder
     />
@@ -49,10 +51,15 @@ import ModalWindow from '../components/ModalWindow.vue';
 import CreateReminder from '../components/CreateReminder.vue';
 import ReminderItem from '../components/ReminderItem.vue';
 
-const store = useAppStore();
+const reminders = useAppStore();
 
 const hasReminders = computed(() => {
-  return store.reminders?.length > 0;
+  return reminders.reminders?.length > 0;
+});
+
+const reminderCountText = computed(() => {
+  const count = reminders.allCount;
+  return `${count} ${count > 1 ? 'reminders' : 'reminder'}`;
 });
 
 </script>

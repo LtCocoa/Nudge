@@ -16,6 +16,7 @@ release
 data
 features.txt
 out/
+docs/
 
 # Editor directories and files
 .vscode/*

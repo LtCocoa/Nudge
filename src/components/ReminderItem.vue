@@ -1,5 +1,5 @@
 <template>
-  <div class="reminder-container gap-3">
+  <div class="reminder-container gap-3 select-none">
     <div class="flex flex-1 flex-col min-w-72 overflow-hidden">
       <div class="font-medium">
         {{ reminder.title }}
@@ -46,7 +46,7 @@ const props = defineProps<ReminderItemProps>();
 
 <style scoped>
 .reminder-container {
-  @apply flex rounded-md border-2 border-gray-200 mr-2 items-center py-3 px-5 cursor-default relative;
+  @apply flex rounded-md shadow-md bg-zinc-50 mr-2 items-center py-3 px-5 cursor-default relative;
 }
 
 .reminder-delete {
