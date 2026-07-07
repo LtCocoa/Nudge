@@ -17,14 +17,12 @@
 
   <ModalWindow>
     <template #open-button="{ onOpen }">
-      <button
-        id="open-button"
-        class="btn"
-        type="button"
+      <AppButton
+        variant="primary"
         @click="onOpen"
       >
         New reminder
-      </button>
+      </AppButton>
     </template>
 
     <template #default="{ onClose }">
@@ -32,14 +30,12 @@
     </template>
 
     <template #close-button="{ onClose }">
-      <button
-        id="close-button"
-        class="btn mt-2"
-        type="button"
+      <AppButton
+        class="mt-2"
         @click="onClose"
       >
-        Close
-      </button>
+        Cancel
+      </AppButton>
     </template>
   </ModalWindow>
 </template>
@@ -50,6 +46,7 @@ import { computed } from 'vue';
 import ModalWindow from '../components/ModalWindow.vue';
 import CreateReminder from '../components/CreateReminder.vue';
 import ReminderItem from '../components/ReminderItem.vue';
+import AppButton from '../components/AppButton.vue';
 
 const reminders = useAppStore();
 

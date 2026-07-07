@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col text-xl gap-2">
+  <div class="flex flex-col text-lg gap-2">
     <label for="reminder-name">Name:</label>
     <input
       id="reminder-name"
@@ -37,13 +37,12 @@
       >Recurrent</label>
     </div>
 
-    <button
-      type="button"
-      class="btn mt-10"
+    <AppButton
+      variant="primary"
       @click="onAddreminderClick"
     >
       Add
-    </button>
+    </AppButton>
   </div>
 </template>
 
@@ -52,6 +51,7 @@ import { ref } from 'vue';
 import { useAppStore } from '../stores/Store';
 import { Reminder } from '../../shared/models/Reminder';
 import { createReminder } from '../utils';
+import AppButton from './AppButton.vue';
 
 const emit = defineEmits(['created']);
 

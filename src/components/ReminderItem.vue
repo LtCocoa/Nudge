@@ -16,7 +16,7 @@
       <div class="p-2 bg-neutral-300 text-gray-950-700 rounded-md font-medium">
         {{ formatDate(reminder.date) }}
       </div>
-      <div class="p-2 bg-violet-200 text-violet-700 rounded-md font-medium flex gap-1 cursor-pointer">
+      <div class="p-2 bg-primary-soft text-primary-strong rounded-md font-medium flex gap-1 cursor-pointer">
         <AlarmClock :size="23" />
         <span>{{ formatTime(reminder.date) }}</span>
       </div>
