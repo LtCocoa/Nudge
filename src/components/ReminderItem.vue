@@ -58,6 +58,6 @@ const props = defineProps<ReminderItemProps>();
 }
 
 .reminder-delete {
-  @apply cursor-pointer text-red-700;
+  @apply cursor-pointer text-gray-300 hover:text-red-700 transition-colors;
 }
 </style>
