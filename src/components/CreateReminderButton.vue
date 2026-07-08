@@ -5,7 +5,7 @@
         variant="primary"
         @click="onOpen"
       >
-        <div class="flex justify-center gap-1">
+        <div class="flex items-center justify-center gap-1">
           <Plus />
           New reminder
         </div>

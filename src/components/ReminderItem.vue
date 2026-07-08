@@ -50,11 +50,11 @@ const props = defineProps<ReminderItemProps>();
 }
 
 .reminder-date {
-  @apply p-2 bg-neutral-300 rounded-md font-medium;
+  @apply p-2 bg-neutral-300 rounded-md font-medium flex items-center;
 }
 
 .reminder-time {
-  @apply p-2 bg-primary-soft text-primary-strong rounded-md font-medium flex gap-1 cursor-pointer;
+  @apply p-2 bg-primary-soft text-primary-strong rounded-md font-medium cursor-pointer flex gap-1 items-center;
 }
 
 .reminder-delete {
