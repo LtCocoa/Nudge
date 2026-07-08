@@ -9,9 +9,7 @@
           <div class="app-logo-title">Nudge</div>
         </div>
       </div>
-      <Teleport to="body">
-        buh
-      </Teleport>
+
       <div class="mt-3" >
         <CreateReminderButton />
       </div>
