@@ -36,13 +36,11 @@ export const useReminderStore = defineStore('app', {
       return state.reminders.sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date)));
     },
     today(): Reminder[] {
-      console.log('today');
       const rems = this.reminders.filter(reminder => {
         if (!reminder.date) return false;
 
         return isToday(new Date(reminder.date));
       });
-      console.log(this.reminders);
       return rems;
     },
     upcoming: (state) => {
