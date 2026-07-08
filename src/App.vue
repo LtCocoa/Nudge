@@ -3,13 +3,17 @@
     <div class="app-sidebar">
       <div class="app-logo-wrapper select-none">
         <div class="app-logo">
-          <div class="app-logo-icon">
-            <img class="w-8 h-8" :src="logo" draggable="false">
+          <div class="app-logo-icon w-8 h-8">
+            <img :src="logo" draggable="false">
           </div>
           <div class="app-logo-title">Nudge</div>
         </div>
       </div>
       <CreateReminderButton />
+
+      <div class="view-list">
+        <div></div>
+      </div>
     </div>
 
     <div class="app-content">
@@ -23,7 +27,6 @@ import { useAppStore } from './stores/Store';
 import ListView from './views/ListView.vue';
 import CreateReminderButton from './components/CreateReminderButton.vue';
 import logo from './assets/logo.png';
-
 const store = useAppStore();
 
 store.getAppData();

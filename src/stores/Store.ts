@@ -6,26 +6,35 @@ interface State {
   reminders: Reminder[];
 }
 
+function isToday(date: Date) {
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 59);
+
+  return date > todayStart && date < todayEnd;
+}
+
 export const useAppStore = defineStore('app', {
   state: (): State => ({
     reminders: []
   }),
   getters: {
-    sorted: (state) => {
+    sortedByDateAsc: (state) => {
       return state.reminders.sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date)));
     },
-    allCount: (state) => {
-      return state.reminders.length;
-    },
-    thisDay: (state) => {
+    today: (state) => {
       return state.reminders.filter(reminder => {
         if (!reminder.date) return false;
-        const dateStart = new Date(reminder.date);
-        dateStart.setHours(0, 0, 0, 0);
-        const dateEnd = new Date(reminder.date);
-        dateEnd.setHours(23, 59, 59, 59);
 
-        return reminder.date > dateStart && reminder.date < dateEnd;
+        return isToday(new Date(reminder.date));
+      });
+    },
+    upcoming: (state) => {
+      return state.reminders.filter(reminder => {
+        if (!reminder.date) return false;
+
+        return !isToday(new Date(reminder.date));
       });
     }
   },

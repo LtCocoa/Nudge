@@ -13,10 +13,16 @@
       v-if="reminder.date"
       class="flex gap-2"
     >
-      <div class="reminder-date">
+      <div
+        class="reminder-date"
+        v-if="showDate"
+      >
         {{ formatDate(reminder.date) }}
       </div>
-      <div class="reminder-time">
+      <div
+        class="reminder-time"
+        v-if="showTime"
+      >
         <AlarmClock :size="23" />
         <span>{{ formatTime(reminder.date) }}</span>
       </div>
@@ -38,10 +44,18 @@ import { AlarmClock, Trash2 } from '@lucide/vue';
 
 export interface ReminderItemProps {
   reminder: Reminder;
+  showDate: boolean;
+  showTime: boolean;
 }
 
 const store = useAppStore();
-const props = defineProps<ReminderItemProps>();
+const props = withDefaults(
+  defineProps<ReminderItemProps>(),
+  {
+    showDate: false,
+    showTime: false,
+  }
+);
 </script>
 
 <style scoped>
