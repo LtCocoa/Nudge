@@ -37,11 +37,11 @@
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from '../stores/Store';
+import { useReminderStore } from '../stores/Store';
 import { computed } from 'vue';
 import ReminderItem from '../components/ReminderItem.vue';
 
-const reminderStore = useAppStore();
+const reminderStore = useReminderStore();
 
 const hasReminders = computed(() => {
   return reminderStore.reminders?.length > 0;

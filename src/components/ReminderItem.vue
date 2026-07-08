@@ -38,17 +38,17 @@
 
 <script setup lang="ts">
 import { Reminder } from '../../shared/models/Reminder';
-import { useAppStore } from '../stores/Store';
+import { useReminderStore } from '../stores/Store';
 import { formatDate, formatTime } from '../utils';
 import { AlarmClock, Trash2 } from '@lucide/vue';
 
 export interface ReminderItemProps {
   reminder: Reminder;
-  showDate: boolean;
-  showTime: boolean;
+  showDate?: boolean;
+  showTime?: boolean;
 }
 
-const store = useAppStore();
+const store = useReminderStore();
 const props = withDefaults(
   defineProps<ReminderItemProps>(),
   {

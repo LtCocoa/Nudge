@@ -15,7 +15,7 @@ function isToday(date: Date) {
   return date > todayStart && date < todayEnd;
 }
 
-export const useAppStore = defineStore('app', {
+export const useReminderStore = defineStore('app', {
   state: (): State => ({
     reminders: []
   }),
@@ -39,7 +39,7 @@ export const useAppStore = defineStore('app', {
     }
   },
   actions: {
-    async getAppData() {
+    async getReminders() {
       this.reminders = await reminderApi.getAll();
     },
     createReminder(reminder: Reminder) {
