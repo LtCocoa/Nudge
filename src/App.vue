@@ -1,10 +1,10 @@
 <template>
   <div class="app-wrapper">
     <div class="app-sidebar">
-      <div class="app-logo-wrapper">
+      <div class="app-logo-wrapper select-none">
         <div class="app-logo">
           <div class="app-logo-icon">
-            <BellRingIcon />
+            <img class="w-8 h-8" :src="logo" draggable="false">
           </div>
           <div class="app-logo-title">Nudge</div>
         </div>
@@ -22,7 +22,7 @@
 import { useAppStore } from './stores/Store';
 import ListView from './views/ListView.vue';
 import CreateReminderButton from './components/CreateReminderButton.vue';
-import { BellRingIcon } from '@lucide/vue';
+import logo from './assets/logo.png';
 
 const store = useAppStore();
 
