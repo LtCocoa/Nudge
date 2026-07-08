@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { Reminder } from '../../shared/models/Reminder';
-import { useReminderStore } from '../stores/Store';
+import { useReminderStore } from '../stores/appStore';
 import { formatDate, formatTime } from '../utils';
 import { AlarmClock, Trash2 } from '@lucide/vue';
 

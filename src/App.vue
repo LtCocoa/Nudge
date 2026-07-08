@@ -9,34 +9,26 @@
           <div class="app-logo-title">Nudge</div>
         </div>
       </div>
-      <CreateReminderButton />
+      <Teleport to="body">
+        buh
+      </Teleport>
+      <div class="mt-3" >
+        <CreateReminderButton />
+      </div>
 
-      <div class="view-list">
-        <div class="view-item">
-          <CalendarDays />
-          <span class="view-item-title">All reminders</span>
-          <span class="view-item-count">{{ reminderStore.reminders.length }}</span>
-        </div>
-        <div class="view-item">
-          <CalendarClock />
-          <span class="view-item-title">Today</span>
-          <span
-            class="view-item-count">{{ reminderStore.today.length }}</span>
-        </div>
-        <div class="view-item">
-          <CalendarSync />
-          <span class="view-item-title">Repeatable</span>
-          <span class="view-item-count">0</span>
-        </div>
-        <div class="view-item">
-          <CalendarCheck2 />
-          <span class="view-item-title">Completed</span>
-          <span class="view-item-count">0</span>
-        </div>
-        <div class="view-item">
-          <Calendar />
-          <span class="view-item-title">Without date</span>
-          <span class="view-item-count">0</span>
+      <div class="filter-list">
+        <div
+          class="filter-item"
+          :class="{
+            active: reminderStore.currentFilter === filterItem.filter,
+          }"
+          v-for="(filterItem, index) in filterItems"
+          :key="index"
+          @click="reminderStore.setFilter(filterItem.filter)"
+        >
+          <component :is="filterItem.icon" />
+          <span class="filter-item-title">{{ filterItem.title }}</span>
+          <span class="filter-item-count">{{ filterItem.count }}</span>
         </div>
       </div>
     </div>
@@ -48,20 +40,56 @@
 </template>
 
 <script setup lang="ts">
-import { useReminderStore } from './stores/Store';
+import { ReminderFilter, useReminderStore } from './stores/appStore';
 import ListView from './views/ListView.vue';
 import CreateReminderButton from './components/CreateReminderButton.vue';
 import logo from './assets/logo.png';
-import { CalendarClock } from '@lucide/vue';
-import { CalendarDays } from '@lucide/vue';
-import { CalendarSync } from '@lucide/vue';
-import { CalendarCheck2 } from '@lucide/vue';
-import { Calendar } from '@lucide/vue';
+import {
+  type LucideIcon,
+  CalendarClock,
+  CalendarDays,
+  CalendarSync,
+  CalendarCheck2
+} from '@lucide/vue';
+import { computed } from 'vue';
 
 const reminderStore = useReminderStore();
 
 reminderStore.getReminders();
 
+interface ReminderFilterItem {
+  title: string;
+  filter: ReminderFilter,
+  count: number,
+  icon: LucideIcon,
+}
+
+const filterItems = computed<ReminderFilterItem[]>(() => [
+  {
+    title: 'All reminders',
+    filter: ReminderFilter.All,
+    count: reminderStore.reminders.length,
+    icon: CalendarDays,
+  },
+  {
+    title: 'Today',
+    filter: ReminderFilter.Today,
+    count: reminderStore.today.length,
+    icon: CalendarClock,
+  },
+  {
+    title: 'Repeating',
+    filter: ReminderFilter.Repeating,
+    count: reminderStore.repeating.length,
+    icon: CalendarSync,
+  },
+  {
+    title: 'Completed',
+    filter: ReminderFilter.Completed,
+    count: [].length,
+    icon: CalendarCheck2,
+  }
+]);
 </script>
 
 <style scoped>
@@ -82,15 +110,19 @@ reminderStore.getReminders();
         }
       }
     }
-    .view-list {
+    .filter-list {
       @apply flex flex-col gap-1 mt-5 select-none;
 
-      .view-item {
+      .filter-item {
         @apply flex gap-3 p-2 hover:bg-primary-soft rounded-md cursor-pointer transition-colors text-text-secondary hover:text-primary-strong font-semibold;
 
-        .view-item-count {
-          @apply ml-auto bg-background-soft px-2 rounded;
+        .filter-item-count {
+          @apply ml-auto bg-background-soft px-2 rounded-lg;
         }
+      }
+
+      .filter-item.active {
+        @apply bg-primary-soft text-primary-strong;
       }
     }
   }

@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useReminderStore } from '../stores/Store';
+import { useReminderStore } from '../stores/appStore';
 import { Reminder } from '../../shared/models/Reminder';
 import { createReminder } from '../utils';
 import AppButton from './AppButton.vue';
