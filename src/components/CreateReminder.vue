@@ -1,28 +1,19 @@
 <template>
   <div class="flex flex-col text-lg gap-2">
-    <label for="reminder-name">Name:</label>
-    <input
-      id="reminder-name"
+    <AppInput
+      label="Name"
       v-model="reminder.title"
-      class="input"
-      type="text"
-    >
-
-    <label for="reminder-description">Description:</label>
-    <textarea
-      id="reminder-description"
-      v-model="reminder.description"
-      class="input max-h-60"
-      type="text"
     />
 
-    <label for="reminder-schedule">Schedule:</label>
-    <input
-      id="reminder-schedule"
+    <AppTextarea
+      label="Description"
+      v-model="reminder.description"
+    />
+
+    <AppDatetimeInput
+      label="Schedule"
       v-model="reminder.date"
-      class="input"
-      type="datetime-local"
-    >
+    />
 
     <div>
       <input
@@ -52,6 +43,9 @@ import { useAppStore } from '../stores/Store';
 import { Reminder } from '../../shared/models/Reminder';
 import { createReminder } from '../utils';
 import AppButton from './AppButton.vue';
+import AppInput from './AppInput.vue';
+import AppTextarea from './AppTextarea.vue';
+import AppDatetimeInput from './AppDatetimeInput.vue';
 
 const emit = defineEmits(['created']);
 

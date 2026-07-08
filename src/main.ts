@@ -3,8 +3,8 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue';
 
-import './main.css';
 import './variables.css';
+import './main.css';
 
 const pinia = createPinia();
 

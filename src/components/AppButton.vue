@@ -1,11 +1,12 @@
 <template>
   <button
     type="button"
-    class="btn"
-    :class="[
-      `btn-${variant}`,
-    ]"
-    :attrs="$attrs"
+    :class="{
+      'btn': true,
+      'btn-primary': variant === 'primary',
+      'btn-secondary': variant === 'secondary',
+    }"
+    v-bind="$attrs"
   >
     <slot />
   </button>

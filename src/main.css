@@ -4,19 +4,23 @@
 
 @layer components {
   .btn {
-    @apply bg-surface border text-text p-1.5 rounded w-full transition-all text-base font-medium select-none;
+    @apply bg-surface border text-text p-1.5 rounded-md w-full transition-all text-base font-medium select-none;
   }
 
   .btn-primary {
-    @apply bg-primary text-text-primary hover:bg-primary-strong;
+    @apply bg-primary border-0 text-text-primary hover:bg-primary-strong;
   }
 
   .btn-secondary {
-    
+    @apply hover:bg-background-soft;
+  }
+
+  .input-wrapper {
+    @apply flex flex-col;
   }
 
   .input {
-    @apply p-2 rounded border border-primary;
+    @apply p-2 rounded border-2;
   }
 }
 

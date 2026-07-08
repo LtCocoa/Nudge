@@ -1,7 +1,7 @@
 <template>
-  <div class="reminder-container gap-3 select-none">
+  <div class="reminder-container">
     <div class="flex flex-1 flex-col min-w-72 overflow-hidden">
-      <div class="font-medium">
+      <div class="font-semibold">
         {{ reminder.title }}
       </div>
       <div>
@@ -13,10 +13,10 @@
       v-if="reminder.date"
       class="flex gap-2"
     >
-      <div class="p-2 bg-neutral-300 text-gray-950-700 rounded-md font-medium">
+      <div class="reminder-date">
         {{ formatDate(reminder.date) }}
       </div>
-      <div class="p-2 bg-primary-soft text-primary-strong rounded-md font-medium flex gap-1 cursor-pointer">
+      <div class="reminder-time">
         <AlarmClock :size="23" />
         <span>{{ formatTime(reminder.date) }}</span>
       </div>
@@ -46,7 +46,15 @@ const props = defineProps<ReminderItemProps>();
 
 <style scoped>
 .reminder-container {
-  @apply flex rounded-md shadow-md bg-zinc-50 mr-2 items-center py-3 px-5 cursor-default relative;
+  @apply bg-background-soft flex rounded-md drop-shadow-md shadow-slate-300 mr-2 items-center py-3 px-5 gap-3 select-none;
+}
+
+.reminder-date {
+  @apply p-2 bg-neutral-300 rounded-md font-medium;
+}
+
+.reminder-time {
+  @apply p-2 bg-primary-soft text-primary-strong rounded-md font-medium flex gap-1 cursor-pointer;
 }
 
 .reminder-delete {

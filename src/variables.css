@@ -4,10 +4,13 @@
   --color-primary-strong: #7739db;
   
   --color-surface: #ffffff;
+
   --color-background: #cecece;
+  --color-background-soft: #f7f7f7;
 
   --color-text: #1d1d1d;
   --color-text-primary: #ffffff;
+  --color-text-secondary: #5a5a5a;
 
   --font-size: 1rem;
 }
