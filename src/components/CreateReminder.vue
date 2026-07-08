@@ -1,28 +1,19 @@
 <template>
-  <div class="flex flex-col text-xl gap-2">
-    <label for="reminder-name">Name:</label>
-    <input
-      id="reminder-name"
+  <div class="flex flex-col text-lg gap-2">
+    <AppInput
+      label="Title"
       v-model="reminder.title"
-      class="input"
-      type="text"
-    >
-
-    <label for="reminder-description">Description:</label>
-    <textarea
-      id="reminder-description"
-      v-model="reminder.description"
-      class="input max-h-60"
-      type="text"
     />
 
-    <label for="reminder-schedule">Schedule:</label>
-    <input
-      id="reminder-schedule"
+    <AppTextarea
+      label="Description"
+      v-model="reminder.description"
+    />
+
+    <AppDatetimeInput
+      label="Date and time"
       v-model="reminder.date"
-      class="input"
-      type="datetime-local"
-    >
+    />
 
     <div>
       <input
@@ -37,13 +28,12 @@
       >Recurrent</label>
     </div>
 
-    <button
-      type="button"
-      class="btn mt-10"
+    <AppButton
+      variant="primary"
       @click="onAddreminderClick"
     >
       Add
-    </button>
+    </AppButton>
   </div>
 </template>
 
@@ -52,6 +42,10 @@ import { ref } from 'vue';
 import { useAppStore } from '../stores/Store';
 import { Reminder } from '../../shared/models/Reminder';
 import { createReminder } from '../utils';
+import AppButton from './AppButton.vue';
+import AppInput from './AppInput.vue';
+import AppTextarea from './AppTextarea.vue';
+import AppDatetimeInput from './AppDateTimeInput.vue';
 
 const emit = defineEmits(['created']);
 
@@ -59,7 +53,7 @@ const store = useAppStore();
 const reminder = ref<Reminder>(createReminder());
 
 const onAddreminderClick = () => {
-  store.addReminder(reminder.value);
+  store.createReminder(reminder.value);
   reminder.value = createReminder();
   emit('created');
 };

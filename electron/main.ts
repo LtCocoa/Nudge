@@ -6,7 +6,7 @@ import { reminderService } from './reminder/ReminderService';
 import { registerReminderHandlers } from './ipc/reminder';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const APP_NAME = 'Scheduler';
+const APP_NAME = 'Nudge';
 
 app.setAppUserModelId(APP_NAME);
 
@@ -18,7 +18,7 @@ export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST;
 
-const pathToIcon = path.join(`${process.env.APP_ROOT}/src/assets`, 'alarm_clock.png');
+const pathToIcon = path.join(`${process.env.APP_ROOT}/src/assets`, 'icons.ico');
 
 let win: BrowserWindow;
 let tray: Tray;

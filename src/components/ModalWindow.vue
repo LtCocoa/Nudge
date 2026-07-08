@@ -11,12 +11,12 @@
     >
       <div
         v-if="isOpen"
-        class="fixed h-full w-full top-0 left-0 flex items-center justify-center bg-zinc-400 bg-opacity-50"
+        class="modal-background"
         @mousedown.self="onClose"
       >
         <div
           ref="modalContent"
-          class="p-4 rounded-xl bg-standart shadow-xl w-96"
+          class="modal-content"
         >
           <slot :on-close="onClose" />
           <slot
@@ -46,8 +46,13 @@ const onClose = () => {
 </script>
 
 <style scoped>
+.modal-background {
+  @apply fixed h-full w-full top-0 left-0 flex items-center justify-center;
+  background-color: #cecece8a;
+}
+
 .modal-content {
-  background-color: #9b9b9b;
+  @apply p-4 rounded-xl shadow-xl w-96 bg-surface;
 }
 
 .fade-enter-active,

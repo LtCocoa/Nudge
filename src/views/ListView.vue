@@ -1,102 +1,60 @@
 <template>
-  <div v-if="!hasReminders">
-    <span>
-      There are no reminders yet.
-    </span>
-  </div>
+  <div class="flex flex-1 flex-col">
+    <div v-if="!hasReminders">
+      <span class="font-semibold">There are no reminders yet.</span>
+    </div>
+    <div v-else>
+      <div>
+        <div class="font-bold text-2xl">Today reminders</div>
+        <div class="text-text-secondary">{{ todayRemindersCountText }}</div>
 
-  <div class="my-3 overflow-y-scroll shadow-inner flex-1">
-    <ul class="leading-7 flex flex-col gap-2 overflow-y-auto drop-shadow-md">
-      <li
-        v-for="(reminder) in store.sortedReminders"
-        :id="reminder.id"
-        :key="reminder.id"
-        class="flex flex-col"
-      >
-        <div
-          class="w-16 rounded-t-xl bg-red-400 flex justify-center items-center cursor-pointer p-1"
-          @click="onDeleteReminderClick(reminder)"
-        >
-          <BinIcon class="icon" />
+        <div class="my-3 overflow-y-scroll flex-1 flex flex-col gap-2 px-4 py-2">
+          <ReminderItem
+            v-for="reminder in reminderStore.today"
+            :key="reminder.id"
+            :reminder
+            show-time
+          />
         </div>
+      </div>
 
-        <div class="flex-1">
-          <div class="px-2 bg-zinc-50 border-b flex flex-row justify-between items-center">
-            <span>{{ reminder.title }}</span>
-            <div
-              v-if="reminder.date"
-              class="flex flex-row items-center gap-2 text-gray-500"
-            >
-              <ClockIcon class="icon" />
-              <span>{{ formatDate(reminder.date) }}</span>
-            </div>
-          </div>
+      <div>
+        <div class="font-bold text-2xl">All reminders</div>
+        <div class="text-text-secondary">{{ allRemindersCountText }}</div>
 
-          <div
-            v-if="reminder.description"
-            class="p-2 bg-zinc-50"
-          >
-            {{ reminder.description }}
-          </div>
+        <div class="my-3 overflow-y-scroll flex-1 flex flex-col gap-2 px-4 py-2">
+          <ReminderItem
+            v-for="reminder in reminderStore.upcoming"
+            :key="reminder.id"
+            :reminder
+            show-date
+            show-time
+          />
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
-
-  <ModalWindow>
-    <template #open-button="{ onOpen }">
-      <button
-        id="open-button"
-        class="btn"
-        type="button"
-        @click="onOpen"
-      >
-        New reminder
-      </button>
-    </template>
-
-    <template #default="{ onClose }">
-      <CreateReminder @created="onClose" />
-    </template>
-
-    <template #close-button="{ onClose }">
-      <button
-        id="close-button"
-        class="btn mt-2"
-        type="button"
-        @click="onClose"
-      >
-        Close
-      </button>
-    </template>
-  </ModalWindow>
 </template>
 
 <script setup lang="ts">
 import { useAppStore } from '../stores/Store';
 import { computed } from 'vue';
-import ModalWindow from '../components/ModalWindow.vue';
-import CreateReminder from '../components/CreateReminder.vue';
-import { formatDate } from '../utils';
-import { Reminder } from '../../shared/models/Reminder';
-import ClockIcon from '@/assets/clock.svg';
-import BinIcon from '@/assets/bin.svg';
+import ReminderItem from '../components/ReminderItem.vue';
 
-const store = useAppStore();
+const reminderStore = useAppStore();
 
 const hasReminders = computed(() => {
-  return store.reminders?.length > 0;
+  return reminderStore.reminders?.length > 0;
 });
 
-const onDeleteReminderClick = (reminder: Reminder) => {
-  store.deleteReminder(reminder);
-}
+const allRemindersCountText = computed(() => {
+  const count = reminderStore.reminders.length;
+  return `${count} ${count > 1 ? 'reminders' : 'reminder'}`;
+});
+
+const todayRemindersCountText = computed(() => {
+  const count = reminderStore.today.length;
+  return `${count} ${count > 1 ? 'reminders' : 'reminder'}`;
+});
 
 </script>
-
-<style scoped>
-.icon {
-  height: 20px;
-  width: 20px;
-}
-</style>

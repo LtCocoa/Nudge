@@ -1,19 +1,23 @@
 <template>
-  <div class="h-full w-full bg-standart flex flex-col overflow-hidden">
-    <div class="flex justify-start bg-darker">
-      <div
-        v-for="(view, viewIndex) in views"
-        :key="viewIndex"
-        class="view-selector p-4 text-xl hover:bg-sky-600 hover:text-slate-100"
-        :class="{ 'view-selector-active': currentView == view.component }"
-        @click="switchView(viewIndex)"
-      >
-        {{ view.title }}
+  <div class="app-wrapper">
+    <div class="app-sidebar">
+      <div class="app-logo-wrapper select-none">
+        <div class="app-logo">
+          <div class="app-logo-icon w-8 h-8">
+            <img :src="logo" draggable="false">
+          </div>
+          <div class="app-logo-title">Nudge</div>
+        </div>
+      </div>
+      <CreateReminderButton />
+
+      <div class="view-list">
+        <div></div>
       </div>
     </div>
 
-    <div class="flex flex-col flex-1 overflow-auto p-4">
-      <component :is="currentView" />
+    <div class="app-content">
+      <ListView />
     </div>
   </div>
 </template>
@@ -21,40 +25,36 @@
 <script setup lang="ts">
 import { useAppStore } from './stores/Store';
 import ListView from './views/ListView.vue';
-import CalendarView from './views/CalendarView.vue';
-import { shallowRef } from 'vue';
-
-const views = [
-  {
-    component: ListView,
-    title: 'Reminders',
-  },
-  {
-    component: CalendarView,
-    title: 'Calendar'
-  },
-] as const;
-
+import CreateReminderButton from './components/CreateReminderButton.vue';
+import logo from './assets/logo.png';
 const store = useAppStore();
-const currentView = shallowRef(ListView);
-
-function switchView(index: number) {
-  currentView.value = views[index].component;
-}
 
 store.getAppData();
 
 </script>
 
-<style>
-.view-selector {
-  transition: background-color .1s ease-in-out;
-  cursor: pointer;
-  user-select: none;
-}
+<style scoped>
+.app-wrapper {
+  @apply h-full w-full flex overflow-hidden;
 
-.view-selector-active {
-  background-color: rgb(0, 135, 202);
-  color: rgb(238, 242, 247);
+  .app-sidebar {
+    @apply flex-shrink-0 basis-64 p-6 bg-background-soft border-r;
+
+    .app-logo-wrapper {
+      @apply mb-4;
+
+      .app-logo {
+        @apply flex flex-row gap-2 items-center;
+
+        .app-logo-title {
+          @apply text-2xl font-bold;
+        }
+      }
+    }
+  }
+
+  .app-content {
+    @apply flex flex-1 p-6;
+  }
 }
 </style>
