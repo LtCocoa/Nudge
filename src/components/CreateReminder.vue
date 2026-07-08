@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col text-lg gap-2">
     <AppInput
-      label="Name"
+      label="Title"
       v-model="reminder.title"
     />
 
@@ -11,7 +11,7 @@
     />
 
     <AppDatetimeInput
-      label="Schedule"
+      label="Date and time"
       v-model="reminder.date"
     />
 
@@ -45,7 +45,7 @@ import { createReminder } from '../utils';
 import AppButton from './AppButton.vue';
 import AppInput from './AppInput.vue';
 import AppTextarea from './AppTextarea.vue';
-import AppDatetimeInput from './AppDatetimeInput.vue';
+import AppDatetimeInput from './AppDateTimeInput.vue';
 
 const emit = defineEmits(['created']);
 

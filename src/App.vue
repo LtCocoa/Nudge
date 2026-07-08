@@ -1,6 +1,14 @@
 <template>
   <div class="app-wrapper">
     <div class="app-sidebar">
+      <div class="app-logo-wrapper">
+        <div class="app-logo">
+          <div class="app-logo-icon">
+            <BellRingIcon />
+          </div>
+          <div class="app-logo-title">Nudge</div>
+        </div>
+      </div>
       <CreateReminderButton />
     </div>
 
@@ -14,6 +22,7 @@
 import { useAppStore } from './stores/Store';
 import ListView from './views/ListView.vue';
 import CreateReminderButton from './components/CreateReminderButton.vue';
+import { BellRingIcon } from '@lucide/vue';
 
 const store = useAppStore();
 
@@ -27,10 +36,22 @@ store.getAppData();
 
   .app-sidebar {
     @apply flex-shrink-0 basis-64 p-6 bg-background-soft border-r;
+
+    .app-logo-wrapper {
+      @apply mb-4;
+
+      .app-logo {
+        @apply flex flex-row gap-2 items-center;
+
+        .app-logo-title {
+          @apply text-2xl font-bold;
+        }
+      }
+    }
   }
 
   .app-content {
-    @apply flex flex-1 p-4;
+    @apply flex flex-1 p-6;
   }
 }
 </style>
