@@ -3,11 +3,10 @@ import { reminderApi } from "../api/reminder";
 import { Reminder } from "../../shared/models/Reminder";
 
 export enum ReminderFilter {
-  All = 'all',
-  Active = 'active',
-  Completed = 'completed',
-  Repeating = 'repeating',
   Today = 'today',
+  Upcoming = 'upcoming',
+  Repeating = 'repeating',
+  Completed = 'completed',
 }
 
 interface State {
@@ -16,19 +15,31 @@ interface State {
   isLoading: boolean;
 }
 
-function isToday(date: Date) {
-  const todayStart = new Date();
+function getDayRange(date: Date) {
+  const todayStart = new Date(date);
   todayStart.setHours(0, 0, 0, 0);
-  const todayEnd = new Date();
+  const todayEnd = new Date(date);
   todayEnd.setHours(23, 59, 59, 59);
 
+  return [todayStart, todayEnd];
+}
+
+function isToday(date: Date) {
+  const [todayStart, todayEnd] = getDayRange(new Date());
+
   return date > todayStart && date < todayEnd;
+}
+
+function isUpcoming(date: Date) {
+  const [_, todayEnd] = getDayRange(new Date());
+
+  return date > todayEnd;
 }
 
 export const useReminderStore = defineStore('app', {
   state: (): State => ({
     reminders: [],
-    currentFilter: ReminderFilter.All,
+    currentFilter: ReminderFilter.Today,
     isLoading: false,
   }),
   getters: {
@@ -47,7 +58,7 @@ export const useReminderStore = defineStore('app', {
       return state.reminders.filter(reminder => {
         if (!reminder.date) return false;
 
-        return !isToday(new Date(reminder.date));
+        return isUpcoming(new Date(reminder.date));
       });
     },
     repeating(): Reminder[] {
@@ -55,10 +66,10 @@ export const useReminderStore = defineStore('app', {
     },
     filteredReminders(): Reminder[] {
       switch (this.currentFilter) {
-        case ReminderFilter.All:
-          return this.reminders;
         case ReminderFilter.Today:
           return this.today;
+        case ReminderFilter.Upcoming:
+          return this.upcoming;
         case ReminderFilter.Repeating:
           return this.repeating;
         default:
