@@ -5,9 +5,10 @@ import { session } from 'electron';
 import { reminderService } from './reminder/ReminderService';
 import { registerReminderHandlers } from './ipc/reminder';
 import { notificationService } from './notification/NotificationService';
+import { appendFileSync } from 'node:fs';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const APP_ID = 'dev.ltcocoa.nudge';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.setAppUserModelId(APP_ID);
 
@@ -17,12 +18,31 @@ export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL'];
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron');
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
 
+console.log('APP_ROOT:', process.env.APP_ROOT);
+console.log('MAIN_DIST:', MAIN_DIST);
+console.log('RENDERER_DIST:', RENDERER_DIST);
+
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST;
 
-const pathToIcon = path.join(`${process.env.APP_ROOT}/src/assets`, 'icons.ico');
+const pathToIcon = path.join(process.env.APP_ROOT, 'electron', 'assets', 'icons.ico');
 
 let win: BrowserWindow;
 let tray: Tray;
+
+function log(message: string) {
+  appendFileSync(
+    app.getPath('desktop') + '/electron.log',
+    message + '\n'
+  );
+}
+
+process.on('uncaughtException', (err) => {
+  log(err.stack ?? String(err));
+});
+
+process.on('unhandledRejection', (err) => {
+  log(String(err));
+});
 
 const closeApplication = () => {
   if (process.platform !== 'darwin') {
