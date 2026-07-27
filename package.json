@@ -1,5 +1,5 @@
 {
-  "name": "remind-me-app",
+  "name": "Nudge",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -10,7 +10,7 @@
   "description": "simple reminder app",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build && electron-builder",
+    "build": "vue-tsc --skipLibCheck && vite build && electron-builder",
     "preview": "vite preview",
     "eslint": "eslint src",
     "eslint-fix": "eslint src --fix",

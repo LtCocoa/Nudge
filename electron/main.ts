@@ -7,9 +7,9 @@ import { registerReminderHandlers } from './ipc/reminder';
 import { notificationService } from './notification/NotificationService';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const APP_NAME = 'Nudge';
+const APP_ID = 'dev.ltcocoa.nudge';
 
-app.setAppUserModelId(APP_NAME);
+app.setAppUserModelId(APP_ID);
 
 process.env.APP_ROOT = path.join(__dirname, '..');
 
@@ -91,7 +91,7 @@ app.whenReady().then(() => {
     { label: 'Quit', type: 'normal', click: closeApplication }
   ]);
 
-  tray.setToolTip(APP_NAME);
+  tray.setToolTip(APP_ID);
   tray.setContextMenu(contextMenu);
 
   tray.on('click', () => {
