@@ -4,6 +4,7 @@ import path from 'node:path';
 import { session } from 'electron';
 import { reminderService } from './reminder/ReminderService';
 import { registerReminderHandlers } from './ipc/reminder';
+import { notificationService } from './notification/NotificationService';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const APP_NAME = 'Nudge';
@@ -38,6 +39,8 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.mjs'),
     },
   });
+
+  notificationService.setWindow(win);
 
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {

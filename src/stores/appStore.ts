@@ -44,7 +44,11 @@ export const useReminderStore = defineStore('app', {
   }),
   getters: {
     sortedByDateAsc: (state) => {
-      return state.reminders.sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date)));
+      return state.reminders.sort((a, b) => {
+        if (!a.date) return -1;
+        if (!b.date) return 1;
+        return Number(new Date(a.date)) - Number(new Date(b.date))
+      });
     },
     today(): Reminder[] {
       const rems = this.reminders.filter(reminder => {
