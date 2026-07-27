@@ -9,10 +9,25 @@
           <div class="app-logo-title">Nudge</div>
         </div>
       </div>
-      <CreateReminderButton />
 
-      <div class="view-list">
-        <div></div>
+      <div class="mt-3" >
+        <CreateReminderButton />
+      </div>
+
+      <div class="filter-list">
+        <div
+          class="filter-item"
+          :class="{
+            active: reminderStore.currentFilter === filterItem.filter,
+          }"
+          v-for="(filterItem, index) in filterItems"
+          :key="index"
+          @click="reminderStore.setFilter(filterItem.filter)"
+        >
+          <component :is="filterItem.icon" />
+          <span class="filter-item-title">{{ filterItem.title }}</span>
+          <span class="filter-item-count">{{ filterItem.count }}</span>
+        </div>
       </div>
     </div>
 
@@ -23,14 +38,56 @@
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from './stores/Store';
+import { ReminderFilter, useReminderStore } from './stores/appStore';
 import ListView from './views/ListView.vue';
 import CreateReminderButton from './components/CreateReminderButton.vue';
 import logo from './assets/logo.png';
-const store = useAppStore();
+import {
+  type LucideIcon,
+  CalendarClock,
+  CalendarDays,
+  CalendarSync,
+  CalendarCheck2
+} from '@lucide/vue';
+import { computed } from 'vue';
 
-store.getAppData();
+const reminderStore = useReminderStore();
 
+reminderStore.getReminders();
+
+interface ReminderFilterItem {
+  title: string;
+  filter: ReminderFilter,
+  count: number,
+  icon: LucideIcon,
+}
+
+const filterItems = computed<ReminderFilterItem[]>(() => [
+  {
+    title: 'Today',
+    filter: ReminderFilter.Today,
+    count: reminderStore.today.length,
+    icon: CalendarClock,
+  },
+  {
+    title: 'Upcoming',
+    filter: ReminderFilter.Upcoming,
+    count: reminderStore.upcoming.length,
+    icon: CalendarDays,
+  },
+  {
+    title: 'Repeating',
+    filter: ReminderFilter.Repeating,
+    count: reminderStore.repeating.length,
+    icon: CalendarSync,
+  },
+  {
+    title: 'Completed',
+    filter: ReminderFilter.Completed,
+    count: [].length,
+    icon: CalendarCheck2,
+  }
+]);
 </script>
 
 <style scoped>
@@ -49,6 +106,21 @@ store.getAppData();
         .app-logo-title {
           @apply text-2xl font-bold;
         }
+      }
+    }
+    .filter-list {
+      @apply flex flex-col gap-1 mt-5 select-none;
+
+      .filter-item {
+        @apply flex gap-3 p-2 hover:bg-primary-soft rounded-md cursor-pointer transition-colors text-text-secondary hover:text-primary-strong font-semibold;
+
+        .filter-item-count {
+          @apply ml-auto bg-background-soft px-2 rounded-lg;
+        }
+      }
+
+      .filter-item.active {
+        @apply bg-primary-soft text-primary-strong;
       }
     }
   }

@@ -1,6 +1,7 @@
 import schedule from 'node-schedule';
 import { Notification } from 'electron';
 import { Reminder } from '../../shared/models/Reminder';
+import { notificationService } from '../notification/NotificationService';
 
 class ReminderScheduler {
   init(reminders: Reminder[] = []) {
@@ -33,8 +34,12 @@ class ReminderScheduler {
         body: reminder.description,
         silent: false,
       });
+
+      // notification.on('click')
+
       // todo - открыть окно приложения и показать напоминалку по клику на уведомление
       notification.show();
+      notificationService.toggleFlash(true);
     });
   }
 
