@@ -64,25 +64,25 @@ interface ReminderFilterItem {
 
 const filterItems = computed<ReminderFilterItem[]>(() => [
   {
-    title: 'Today',
+    title: ReminderFilter[ReminderFilter.Today],
     filter: ReminderFilter.Today,
     count: reminderStore.today.length,
     icon: CalendarClock,
   },
   {
-    title: 'Upcoming',
+    title: ReminderFilter[ReminderFilter.Upcoming],
     filter: ReminderFilter.Upcoming,
     count: reminderStore.upcoming.length,
     icon: CalendarDays,
   },
   {
-    title: 'Repeating',
+    title: ReminderFilter[ReminderFilter.Repeating],
     filter: ReminderFilter.Repeating,
     count: reminderStore.repeating.length,
     icon: CalendarSync,
   },
   {
-    title: 'Completed',
+    title: ReminderFilter[ReminderFilter.Completed],
     filter: ReminderFilter.Completed,
     count: [].length,
     icon: CalendarCheck2,

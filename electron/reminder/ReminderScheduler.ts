@@ -13,7 +13,7 @@ class ReminderScheduler {
   }
 
   schedule(reminder: Reminder) {
-    if (!reminder.date) throw new Error('Reminder must have a date to schedule it');
+    if (!reminder.date) throw new Error(`Could not schedule reminder ${reminder.id} because it doesn't have a date`);
 
     let spec: schedule.Spec;
 
@@ -34,8 +34,6 @@ class ReminderScheduler {
         body: reminder.description,
         silent: false,
       });
-
-      // notification.on('click')
 
       // todo - открыть окно приложения и показать напоминалку по клику на уведомление
       notification.show();

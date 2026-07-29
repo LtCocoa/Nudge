@@ -1,11 +1,11 @@
-import { app, BrowserWindow, Tray, Menu } from 'electron';
+import { app, BrowserWindow, Tray, Menu } from 'electron/main';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { session } from 'electron';
 import { reminderService } from './reminder/ReminderService';
 import { registerReminderHandlers } from './ipc/reminder';
 import { notificationService } from './notification/NotificationService';
-import { appendFileSync } from 'node:fs';
+import { logger } from './Logger';
 
 const APP_NAME = 'Nudge';
 const APP_ID = 'dev.ltcocoa.nudge';
@@ -26,22 +26,17 @@ const pathToIcon = path.join(process.env.APP_ROOT, 'electron', 'assets', 'icon.i
 let win: BrowserWindow;
 let tray: Tray;
 
-function log(message: string) {
-  appendFileSync(
-    app.getPath('desktop') + '/electron.log',
-    message + '\n'
-  );
-}
-
 process.on('uncaughtException', (err) => {
-  log(err.stack ?? String(err));
+  logger.error(err.stack ?? String(err));
 });
 
 process.on('unhandledRejection', (err) => {
-  log(String(err));
+  logger.error(String(err));
 });
 
 const closeApplication = () => {
+  logger.log('App closed');
+
   if (process.platform !== 'darwin') {
     app.exit();
   }
@@ -59,11 +54,6 @@ function createWindow() {
 
   notificationService.setWindow(win);
 
-  // Test active push message to Renderer-process.
-  win.webContents.on('did-finish-load', () => {
-    win?.webContents.send('main-process-message', (new Date).toLocaleString());
-  });
-
   registerReminderHandlers();
 
   if (VITE_DEV_SERVER_URL) {
@@ -76,6 +66,9 @@ function createWindow() {
     event.preventDefault();
     win.hide();
   });
+
+  win.setMenu(null);
+  win.webContents.openDevTools();
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -92,6 +85,8 @@ app.on('activate', () => {
 });
 
 app.whenReady().then(() => {
+  logger.log('App started');
+  
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
