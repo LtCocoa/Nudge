@@ -1,5 +1,4 @@
 import { type BrowserWindow } from "electron";
-import { AppError } from "../error";
 
 class NotificationService {
   private window: BrowserWindow | null = null;
@@ -10,7 +9,6 @@ class NotificationService {
 
   toggleFlash(flag: boolean) {
     if (!this.window) {
-      // throw new AppError('')
       return;
     }
     this.window.flashFrame(flag);

@@ -3,10 +3,10 @@ import { reminderApi } from "../api/reminder";
 import { Reminder } from "../../shared/models/Reminder";
 
 export enum ReminderFilter {
-  Today = 'today',
-  Upcoming = 'upcoming',
-  Repeating = 'repeating',
-  Completed = 'completed',
+  Today = 'Today',
+  Upcoming = 'Upcoming',
+  Repeating = 'Repeating',
+  Completed = 'Completed',
 }
 
 interface State {
@@ -92,10 +92,9 @@ export const useReminderStore = defineStore('app', {
         this.isLoading = false;
       }
     },
-    createReminder(reminder: Reminder) {
+    async createReminder(reminder: Reminder) {
+      await reminderApi.create(reminder);
       this.reminders.push(reminder); // должно быть выполнено после сохранения в JSON
-
-      reminderApi.create(reminder);
     },
     async deleteReminder(reminder: Reminder) {
       const deleted = await reminderApi.delete(reminder.id);
