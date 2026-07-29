@@ -1,11 +1,11 @@
-// @see - https://www.electron.build/configuration/configuration
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "dev.ltcocoa.nudge",
   "asar": true,
   "productName": "Nudge",
   "directories": {
-    "output": "release/${version}"
+    "output": "release/${version}",
+    "buildResources": "electron/assets"
   },
   "files": [
     "dist",
@@ -19,6 +19,7 @@
     "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
   },
   "win": {
+    "icon": "icon.ico",
     "target": [
       {
         "target": "nsis",
