@@ -7,6 +7,7 @@ import { registerReminderHandlers } from './ipc/reminder';
 import { notificationService } from './notification/NotificationService';
 import { appendFileSync } from 'node:fs';
 
+const APP_NAME = 'Nudge';
 const APP_ID = 'dev.ltcocoa.nudge';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -18,13 +19,9 @@ export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL'];
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron');
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
 
-console.log('APP_ROOT:', process.env.APP_ROOT);
-console.log('MAIN_DIST:', MAIN_DIST);
-console.log('RENDERER_DIST:', RENDERER_DIST);
-
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST;
 
-const pathToIcon = path.join(process.env.APP_ROOT, 'electron', 'assets', 'icons.ico');
+const pathToIcon = path.join(process.env.APP_ROOT, 'electron', 'assets', 'icon.ico');
 
 let win: BrowserWindow;
 let tray: Tray;
@@ -111,7 +108,7 @@ app.whenReady().then(() => {
     { label: 'Quit', type: 'normal', click: closeApplication }
   ]);
 
-  tray.setToolTip(APP_ID);
+  tray.setToolTip(APP_NAME);
   tray.setContextMenu(contextMenu);
 
   tray.on('click', () => {
