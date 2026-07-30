@@ -13,5 +13,6 @@ contextBridge.exposeInMainWorld('reminders', {
   },
   'getAll': () => {
     return ipcRenderer.invoke('get-reminders');
-  }
+  },
+  onUpdateReminders: (cb: any) => ipcRenderer.on('update-reminders', () => cb()),
 });

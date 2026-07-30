@@ -14,6 +14,11 @@ class ReminderApi {
   delete(reminderId: string) {
     return window.reminders.delete(reminderId);
   }
+  registerEventHandlers() {
+    window.reminders.onUpdateReminders(() => {
+      this.getAll();
+    });
+  }
 }
 
 export const reminderApi = new ReminderApi();
