@@ -111,3 +111,29 @@ export const fillMonth = (
 
   return days;
 }
+
+export function getDayRange(date: Date) {
+  const todayStart = new Date(date);
+  todayStart.setHours(0, 0, 0, 0);
+  const todayEnd = new Date(date);
+  todayEnd.setHours(23, 59, 59, 59);
+
+  return [todayStart, todayEnd];
+}
+
+export function isToday(date: Date) {
+  const [todayStart, todayEnd] = getDayRange(new Date());
+
+  return date > todayStart && date < todayEnd;
+}
+
+export function isUpcoming(date: Date) {
+  const [_, todayEnd] = getDayRange(new Date());
+
+  return date > todayEnd;
+}
+
+export function getTimeToNextDay() {
+  const midnight = new Date().setHours(24, 0, 0, 0);
+  return midnight - Date.now();
+}

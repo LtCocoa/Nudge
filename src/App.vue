@@ -18,11 +18,11 @@
         <div
           class="filter-item"
           :class="{
-            active: reminderStore.currentFilter === filterItem.filter,
+            active: appStore.currentFilter === filterItem.filter,
           }"
           v-for="(filterItem, index) in filterItems"
           :key="index"
-          @click="reminderStore.setFilter(filterItem.filter)"
+          @click="appStore.setFilter(filterItem.filter)"
         >
           <component :is="filterItem.icon" />
           <span class="filter-item-title">{{ filterItem.title }}</span>
@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { ReminderFilter, useReminderStore } from './stores/appStore';
+import { ReminderFilter, useAppStore } from './stores/appStore';
 import ListView from './views/ListView.vue';
 import CreateReminderButton from './components/CreateReminderButton.vue';
 import logo from './assets/logo.png';
@@ -50,10 +50,38 @@ import {
   CalendarCheck2
 } from '@lucide/vue';
 import { computed } from 'vue';
+import { getTimeToNextDay } from './utils';
 
-const reminderStore = useReminderStore();
+type ClType = {
+  x: number;
+}
 
-reminderStore.getReminders();
+function cl(this: ClType, x?: number): ClType {
+  
+  console.log('con called');
+  console.log();
+  this.x = x ?? 10;
+  return this;
+}
+
+const o = new cl();
+console.log(o.__proto__)
+console.log(cl.prototype);
+// console.log(con());
+
+const appStore = useAppStore();
+
+appStore.getReminders();
+
+const updateCurrentDate = () => {
+  appStore.updateCurrentDate();
+
+  setTimeout(() => {
+    updateCurrentDate();
+  }, getTimeToNextDay());
+}
+
+updateCurrentDate();
 
 interface ReminderFilterItem {
   title: string;
@@ -66,19 +94,19 @@ const filterItems = computed<ReminderFilterItem[]>(() => [
   {
     title: ReminderFilter[ReminderFilter.Today],
     filter: ReminderFilter.Today,
-    count: reminderStore.today.length,
+    count: appStore.today.length,
     icon: CalendarClock,
   },
   {
     title: ReminderFilter[ReminderFilter.Upcoming],
     filter: ReminderFilter.Upcoming,
-    count: reminderStore.upcoming.length,
+    count: appStore.upcoming.length,
     icon: CalendarDays,
   },
   {
     title: ReminderFilter[ReminderFilter.Repeating],
     filter: ReminderFilter.Repeating,
-    count: reminderStore.repeating.length,
+    count: appStore.repeating.length,
     icon: CalendarSync,
   },
   {

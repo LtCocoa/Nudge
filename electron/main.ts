@@ -111,8 +111,4 @@ app.whenReady().then(() => {
   });
 
   createWindow();
-
-  win.webContents.on('did-finish-load', () => {
-    win.webContents.send('update-reminders');
-  });
 });

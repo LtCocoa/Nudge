@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
-import { reminderApi } from "../api/reminder";
+import { rendererReminderApi } from "../api/reminder";
 import { Reminder } from "../../shared/models/Reminder";
+import { isToday, isUpcoming } from "../utils";
 
 export enum ReminderFilter {
   Today = 'Today',
@@ -13,34 +14,15 @@ interface State {
   reminders: Reminder[];
   currentFilter: ReminderFilter;
   isLoading: boolean;
+  currentDate: Date,
 }
 
-function getDayRange(date: Date) {
-  const todayStart = new Date(date);
-  todayStart.setHours(0, 0, 0, 0);
-  const todayEnd = new Date(date);
-  todayEnd.setHours(23, 59, 59, 59);
-
-  return [todayStart, todayEnd];
-}
-
-function isToday(date: Date) {
-  const [todayStart, todayEnd] = getDayRange(new Date());
-
-  return date > todayStart && date < todayEnd;
-}
-
-function isUpcoming(date: Date) {
-  const [_, todayEnd] = getDayRange(new Date());
-
-  return date > todayEnd;
-}
-
-export const useReminderStore = defineStore('app', {
+export const useAppStore = defineStore('app', {
   state: (): State => ({
     reminders: [],
     currentFilter: ReminderFilter.Today,
     isLoading: false,
+    currentDate: new Date(),
   }),
   getters: {
     sortedByDateAsc: (state) => {
@@ -85,7 +67,7 @@ export const useReminderStore = defineStore('app', {
     async getReminders() {
       try {
         this.isLoading = true;
-        this.reminders = await reminderApi.getAll();
+        this.reminders = await rendererReminderApi.getAll();
       } catch(err) {
         console.error(err);
       } finally {
@@ -93,11 +75,11 @@ export const useReminderStore = defineStore('app', {
       }
     },
     async createReminder(reminder: Reminder) {
-      await reminderApi.create(reminder);
+      await rendererReminderApi.create(reminder);
       this.reminders.push(reminder); // должно быть выполнено после сохранения в JSON
     },
     async deleteReminder(reminder: Reminder) {
-      const deleted = await reminderApi.delete(reminder.id);
+      const deleted = await rendererReminderApi.delete(reminder.id);
       if (deleted) {
         const index = this.reminders.findIndex(reminder => reminder.id === deleted.id);
         this.reminders.splice(index, 1);
@@ -105,6 +87,9 @@ export const useReminderStore = defineStore('app', {
     },
     setFilter(filter: ReminderFilter) {
       this.currentFilter = filter;
+    },
+    updateCurrentDate() {
+      this.currentDate = new Date();
     }
   }
 });

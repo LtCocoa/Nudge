@@ -22,10 +22,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { ReminderFilter, useReminderStore } from '../stores/appStore';
+import { ReminderFilter, useAppStore } from '../stores/appStore';
 import ReminderItem from '../components/ReminderItem.vue';
 
-const reminderStore = useReminderStore();
+const reminderStore = useAppStore();
 
 const header = computed(() => {
   return `${ReminderFilter[reminderStore.currentFilter]} reminders`;
