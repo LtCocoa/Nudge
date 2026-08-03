@@ -52,23 +52,6 @@ import {
 import { computed } from 'vue';
 import { getTimeToNextDay } from './utils';
 
-type ClType = {
-  x: number;
-}
-
-function cl(this: ClType, x?: number): ClType {
-  
-  console.log('con called');
-  console.log();
-  this.x = x ?? 10;
-  return this;
-}
-
-const o = new cl();
-console.log(o.__proto__)
-console.log(cl.prototype);
-// console.log(con());
-
 const appStore = useAppStore();
 
 appStore.getReminders();
