@@ -10,13 +10,15 @@ export enum ReminderCategory {
   Expired = 'Expired',
 }
 
+type SortOrder = 'ASC' | 'DESC';
+
 interface State {
   reminders: Reminder[];
   currentCategory: ReminderCategory;
   isLoading: boolean;
   currentDate: Date;
   filter: string;
-  sortOrder: 'ASC' | 'DESC';
+  sortOrder: SortOrder;
 }
 
 export const useAppStore = defineStore('app', {
@@ -122,7 +124,7 @@ export const useAppStore = defineStore('app', {
     setFilter(filter: string) {
       this.filter = filter;
     },
-    setSortTitle(title: 'ASC' | 'DESC') {
+    setSortTitle(title: SortOrder) {
       this.sortOrder = title;
     }
   }
