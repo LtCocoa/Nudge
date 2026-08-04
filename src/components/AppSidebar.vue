@@ -1,6 +1,6 @@
 <template>
   <div class="app-sidebar">
-    <div class="app-logo-wrapper select-none">
+    <div class="app-logo-wrapper">
       <div class="app-logo">
         <div class="app-logo-icon w-8 h-8">
           <img :src="logo" draggable="false">
@@ -29,7 +29,7 @@ import logo from '../assets/logo.png';
     @apply flex-shrink-0 basis-64 p-6 bg-background-soft border-r;
 
     .app-logo-wrapper {
-      @apply mb-4;
+      @apply mb-4 px-3 select-none;
 
       .app-logo {
         @apply flex flex-row gap-2 items-center;
