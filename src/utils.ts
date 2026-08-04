@@ -143,3 +143,29 @@ export function getTimeToNextDay() {
   const midnight = new Date().setHours(24, 0, 0, 0);
   return midnight - Date.now();
 }
+
+export function debounce(fn: any, ms: number) {
+  let timeoutId: NodeJS.Timeout | undefined;
+
+  return (args: any) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(args), ms);
+  }
+}
+
+export function getReminderComparator(order: 'ASC' | 'DESC') {
+  return (left: Reminder, right: Reminder) => {
+    const [prevTitle, nextTitle] = [left.title.toLowerCase(), right.title.toLowerCase()];
+
+    if (prevTitle == nextTitle) return 0;
+
+    switch (order) {
+      case 'ASC':
+        if (prevTitle < nextTitle) return -1;
+        return 1;
+      case "DESC":
+        if (prevTitle < nextTitle) return 1;
+        return -1;
+    }
+  }
+}

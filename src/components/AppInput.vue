@@ -1,18 +1,21 @@
 <template>
   <label class="input-wrapper">
-    <span>{{ label }}:</span>
+    <span v-if="label">{{ label }}:</span>
     <input
       v-model="inputValue"
       type="text"
       class="input"
+      :placeholder
     />
   </label>
 </template>
 
 <script setup lang="ts">
-import { LabeledInputProps } from './types';
 
-interface InputProps extends LabeledInputProps {}
+interface InputProps {
+  label?: string;
+  placeholder?: string;
+}
 
 const props = defineProps<InputProps>();
 const inputValue = defineModel<string>();

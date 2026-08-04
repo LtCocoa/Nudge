@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import { rendererReminderApi } from "../api/reminder";
 import { Reminder } from "../../shared/models/Reminder";
-import { isExpired, isToday, isUpcoming } from "../utils";
+import { getReminderComparator, isExpired, isToday, isUpcoming } from "../utils";
 
-export enum ReminderFilter {
+export enum ReminderCategory {
   Today = 'Today',
   Upcoming = 'Upcoming',
   Repeating = 'Repeating',
@@ -12,17 +12,21 @@ export enum ReminderFilter {
 
 interface State {
   reminders: Reminder[];
-  currentFilter: ReminderFilter;
+  currentCategory: ReminderCategory;
   isLoading: boolean;
-  currentDate: Date,
+  currentDate: Date;
+  filter: string;
+  sortOrder: 'ASC' | 'DESC';
 }
 
 export const useAppStore = defineStore('app', {
   state: (): State => ({
     reminders: [],
-    currentFilter: ReminderFilter.Today,
+    currentCategory: ReminderCategory.Today,
     isLoading: false,
     currentDate: new Date(),
+    filter: '',
+    sortOrder: 'ASC',
   }),
   getters: {
     sortedByDateAsc: (state) => {
@@ -63,19 +67,28 @@ export const useAppStore = defineStore('app', {
         return isExpired(new Date(reminder.date));
       });
     },
-    filteredReminders(): Reminder[] {
-      switch (this.currentFilter) {
-        case ReminderFilter.Today:
+    categorisedReminders(): Reminder[] {
+      switch (this.currentCategory) {
+        case ReminderCategory.Today:
           return this.today;
-        case ReminderFilter.Upcoming:
+        case ReminderCategory.Upcoming:
           return this.upcoming;
-        case ReminderFilter.Repeating:
+        case ReminderCategory.Repeating:
           return this.repeating;
-        case ReminderFilter.Expired:
+        case ReminderCategory.Expired:
           return this.expired;
         default:
           return this.reminders;
       }
+    },
+    filteredCategorisedReminders(): Reminder[] {
+      const sorted = [...this.categorisedReminders]
+        .sort(getReminderComparator(this.sortOrder));
+
+      if (!this.filter) return sorted;
+
+      const trimmedFilter = this.filter.trim();
+      return sorted.filter(reminder => reminder.title.includes(trimmedFilter));
     }
   },
   actions: {
@@ -100,11 +113,17 @@ export const useAppStore = defineStore('app', {
         this.reminders.splice(index, 1);
       }
     },
-    setFilter(filter: ReminderFilter) {
-      this.currentFilter = filter;
+    setCategory(category: ReminderCategory) {
+      this.currentCategory = category;
     },
     updateCurrentDate() {
       this.currentDate = new Date();
+    },
+    setFilter(filter: string) {
+      this.filter = filter;
+    },
+    setSortTitle(title: 'ASC' | 'DESC') {
+      this.sortOrder = title;
     }
   }
 });

@@ -1,6 +1,6 @@
 <template>
   <label class="input-wrapper">
-    <span>{{ label }}:</span>
+    <span v-if="label">{{ label }}:</span>
     <input
       v-model="inputValue"
       type="datetime-local"
@@ -10,9 +10,10 @@
 </template>
 
 <script setup lang="ts">
-import { LabeledInputProps } from './types';
 
-interface DateTimeInputProps extends LabeledInputProps {}
+interface DateTimeInputProps {
+  label?: string;
+}
 
 const props = defineProps<DateTimeInputProps>();
 const inputValue = defineModel<Date | null>();
