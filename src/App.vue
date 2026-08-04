@@ -86,12 +86,12 @@ const filterItems = computed<ReminderFilterItem[]>(() => [
     count: appStore.upcoming.length,
     icon: CalendarDays,
   },
-  {
-    title: ReminderFilter[ReminderFilter.Repeating],
-    filter: ReminderFilter.Repeating,
-    count: appStore.repeating.length,
-    icon: CalendarSync,
-  },
+  // {
+  //   title: ReminderFilter[ReminderFilter.Repeating],
+  //   filter: ReminderFilter.Repeating,
+  //   count: appStore.repeating.length,
+  //   icon: CalendarSync,
+  // },
   {
     title: ReminderFilter[ReminderFilter.Expired],
     filter: ReminderFilter.Expired,

@@ -15,7 +15,7 @@
       v-model="reminder.date"
     />
 
-    <div>
+    <!-- <div>
       <input
         id="reminder-recurrency"
         v-model="reminder.isRecurrent"
@@ -26,7 +26,7 @@
         for="reminder-recurrency"
         class="ml-2"
       >Recurrent</label>
-    </div>
+    </div> -->
 
     <AppButton
       variant="primary"
