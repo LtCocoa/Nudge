@@ -7,6 +7,7 @@ declare global {
       save(reminder: Reminder): void;
       edit(reminder: Reminder): void;
       delete(reminderId: string): Promise<Reminder>;
+      onUpdateReminders(cb: () => void): void;
     }
   }
 }

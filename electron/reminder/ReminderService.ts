@@ -31,7 +31,6 @@ class ReminderService {
         reminderScheduler.schedule(reminder);
         logger.log(`Scheduled reminder ${reminder.id}`);
       }
-
     } catch (err) {
       if (err instanceof Error) {
         logger.error(err.message);

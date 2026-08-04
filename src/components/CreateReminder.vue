@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useReminderStore } from '../stores/appStore';
+import { useAppStore } from '../stores/appStore';
 import { Reminder } from '../../shared/models/Reminder';
 import { createReminder } from '../utils';
 import AppButton from './AppButton.vue';
@@ -49,11 +49,11 @@ import AppDatetimeInput from './AppDateTimeInput.vue';
 
 const emit = defineEmits(['created']);
 
-const reminderStore = useReminderStore();
+const appStore = useAppStore();
 const reminder = ref<Reminder>(createReminder());
 
 const onAddreminderClick = () => {
-  reminderStore.createReminder(reminder.value);
+  appStore.createReminder(reminder.value);
   reminder.value = createReminder();
   emit('created');
 };

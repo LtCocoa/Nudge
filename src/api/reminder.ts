@@ -1,7 +1,7 @@
 import { toRaw } from "vue";
 import { Reminder } from "../../shared/models/Reminder";
 
-class ReminderApi {
+class RendererReminderApi {
   getAll() {
     return window.reminders.getAll();
   }
@@ -16,4 +16,4 @@ class ReminderApi {
   }
 }
 
-export const reminderApi = new ReminderApi();
+export const rendererReminderApi = new RendererReminderApi();
