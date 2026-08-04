@@ -1,9 +1,6 @@
 <template>
   <div class="flex flex-1 flex-col">
-    <div v-if="!hasReminders">
-      <span class="font-semibold">There are no reminders yet.</span>
-    </div>
-    <div v-else class="flex flex-1 flex-col">
+    <div class="flex flex-1 flex-col">
       <div class="font-bold text-2xl">{{ header }}</div>
       <div class="text-text-secondary">{{ remindersCountText }}</div>
 
@@ -28,15 +25,12 @@ import ReminderItem from '../components/ReminderItem.vue';
 const reminderStore = useAppStore();
 
 const header = computed(() => {
-  return `${ReminderFilter[reminderStore.currentFilter]} reminders`;
-});
-
-const hasReminders = computed(() => {
-  return reminderStore.reminders?.length > 0;
+  return `${ReminderFilter[reminderStore.currentFilter]}`;
 });
 
 const remindersCountText = computed(() => {
   const count = reminderStore.filteredReminders.length;
+  if (!count) return 'No reminders';
   return `${count} ${count > 1 ? 'reminders' : 'reminder'}`;
 });
 
