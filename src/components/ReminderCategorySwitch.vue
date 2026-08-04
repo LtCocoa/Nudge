@@ -3,11 +3,11 @@
     <div
       class="filter-item"
       :class="{
-        active: appStore.currentFilter === filterItem.filter,
+        active: appStore.currentCategory === filterItem.filter,
       }"
       v-for="(filterItem, index) in filterItems"
       :key="index"
-      @click="appStore.setFilter(filterItem.filter)"
+      @click="appStore.setCategory(filterItem.filter)"
     >
       <component :is="filterItem.icon" />
       <span class="filter-item-title">{{ filterItem.title }}</span>
@@ -18,12 +18,12 @@
 
 <script setup lang="ts">
 import { CalendarCheck2, CalendarClock, CalendarDays, LucideIcon } from '@lucide/vue';
-import { ReminderFilter, useAppStore } from '../stores/appStore';
+import { ReminderCategory, useAppStore } from '../stores/appStore';
 import { computed } from 'vue';
 
 interface ReminderFilterItem {
   title: string;
-  filter: ReminderFilter,
+  filter: ReminderCategory,
   count: number,
   icon: LucideIcon,
 }
@@ -32,14 +32,14 @@ const appStore = useAppStore();
 
 const filterItems = computed<ReminderFilterItem[]>(() => [
   {
-    title: ReminderFilter[ReminderFilter.Today],
-    filter: ReminderFilter.Today,
+    title: ReminderCategory[ReminderCategory.Today],
+    filter: ReminderCategory.Today,
     count: appStore.today.length,
     icon: CalendarClock,
   },
   {
-    title: ReminderFilter[ReminderFilter.Upcoming],
-    filter: ReminderFilter.Upcoming,
+    title: ReminderCategory[ReminderCategory.Upcoming],
+    filter: ReminderCategory.Upcoming,
     count: appStore.upcoming.length,
     icon: CalendarDays,
   },
@@ -50,8 +50,8 @@ const filterItems = computed<ReminderFilterItem[]>(() => [
   //   icon: CalendarSync,
   // },
   {
-    title: ReminderFilter[ReminderFilter.Expired],
-    filter: ReminderFilter.Expired,
+    title: ReminderCategory[ReminderCategory.Expired],
+    filter: ReminderCategory.Expired,
     count: appStore.expired.length,
     icon: CalendarCheck2,
   }

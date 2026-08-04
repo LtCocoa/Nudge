@@ -3,7 +3,7 @@ import { rendererReminderApi } from "../api/reminder";
 import { Reminder } from "../../shared/models/Reminder";
 import { isExpired, isToday, isUpcoming } from "../utils";
 
-export enum ReminderFilter {
+export enum ReminderCategory {
   Today = 'Today',
   Upcoming = 'Upcoming',
   Repeating = 'Repeating',
@@ -12,17 +12,19 @@ export enum ReminderFilter {
 
 interface State {
   reminders: Reminder[];
-  currentFilter: ReminderFilter;
+  currentCategory: ReminderCategory;
   isLoading: boolean;
-  currentDate: Date,
+  currentDate: Date;
+  filter: string;
 }
 
 export const useAppStore = defineStore('app', {
   state: (): State => ({
     reminders: [],
-    currentFilter: ReminderFilter.Today,
+    currentCategory: ReminderCategory.Today,
     isLoading: false,
     currentDate: new Date(),
+    filter: '',
   }),
   getters: {
     sortedByDateAsc: (state) => {
@@ -63,19 +65,27 @@ export const useAppStore = defineStore('app', {
         return isExpired(new Date(reminder.date));
       });
     },
-    filteredReminders(): Reminder[] {
-      switch (this.currentFilter) {
-        case ReminderFilter.Today:
+    categorisedReminders(): Reminder[] {
+      switch (this.currentCategory) {
+        case ReminderCategory.Today:
           return this.today;
-        case ReminderFilter.Upcoming:
+        case ReminderCategory.Upcoming:
           return this.upcoming;
-        case ReminderFilter.Repeating:
+        case ReminderCategory.Repeating:
           return this.repeating;
-        case ReminderFilter.Expired:
+        case ReminderCategory.Expired:
           return this.expired;
         default:
           return this.reminders;
       }
+    },
+    filteredCategorisedReminders(): Reminder[] {
+      if (!this.filter) return this.categorisedReminders;
+
+      const trimmedFilter = this.filter.trim();
+      return this.categorisedReminders.filter(reminder => {
+        return reminder.title.includes(trimmedFilter);
+      });
     }
   },
   actions: {
@@ -100,11 +110,14 @@ export const useAppStore = defineStore('app', {
         this.reminders.splice(index, 1);
       }
     },
-    setFilter(filter: ReminderFilter) {
-      this.currentFilter = filter;
+    setCategory(category: ReminderCategory) {
+      this.currentCategory = category;
     },
     updateCurrentDate() {
       this.currentDate = new Date();
+    },
+    setFilter(filter: string) {
+      this.filter = filter;
     }
   }
 });

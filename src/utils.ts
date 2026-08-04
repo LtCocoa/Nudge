@@ -143,3 +143,12 @@ export function getTimeToNextDay() {
   const midnight = new Date().setHours(24, 0, 0, 0);
   return midnight - Date.now();
 }
+
+export function debounce(fn: any, ms: number) {
+  let timeoutId: NodeJS.Timeout | undefined;
+
+  return (args: any) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(args), ms);
+  }
+}
