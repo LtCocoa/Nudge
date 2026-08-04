@@ -1,13 +1,22 @@
 <template>
   <div class="flex flex-1 flex-col">
     <div class="flex w-full">
-      <div class="flex flex-1 flex-col">
+      <div class="flex flex-1 flex-col select-none">
         <div class="font-bold text-2xl">{{ header }}</div>
         <div class="text-text-secondary">{{ remindersCountText }}</div>
       </div>
 
-      <div class="flex-1">
-        <AppInput @input="debouncedOnInput" placeholder="Search..." />
+      <div class="flex flex-1 justify-center items-center gap-1">
+        <AppInput
+          class="flex-1"
+          placeholder="Search..."
+          @input="debouncedOnInput"
+        />
+        <div class="flex flex-0 justify-center items-center bg-neutral-200 rounded-md cursor-pointer">
+          <div class="p-2.5" @click="onSortClick">
+            <component :is="appStore.sortOrder == 'ASC' ? ArrowDownAZ : ArrowUpAZ" />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -28,6 +37,8 @@ import { computed, ref } from 'vue';
 import { ReminderCategory, useAppStore } from '../stores/appStore';
 import ReminderItem from '../components/ReminderItem.vue';
 import AppInput from '../components/AppInput.vue';
+import { ArrowUpAZ } from '@lucide/vue';
+import { ArrowDownAZ } from '@lucide/vue';
 import { debounce } from '../utils';
 
 const appStore = useAppStore();
@@ -47,6 +58,10 @@ const remindersCountText = computed(() => {
   if (!count) return 'No reminders';
   return `${count} ${count > 1 ? 'reminders' : 'reminder'}`;
 });
+
+const onSortClick = (e: Event) => {
+  appStore.setSortTitle(appStore.sortOrder == 'ASC' ? 'DESC' : 'ASC');
+}
 
 </script>
 

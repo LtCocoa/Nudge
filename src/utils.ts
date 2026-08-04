@@ -152,3 +152,20 @@ export function debounce(fn: any, ms: number) {
     timeoutId = setTimeout(() => fn(args), ms);
   }
 }
+
+export function getReminderComparator(order: 'ASC' | 'DESC') {
+  return (left: Reminder, right: Reminder) => {
+    const [prevTitle, nextTitle] = [left.title.toLowerCase(), right.title.toLowerCase()];
+
+    if (prevTitle == nextTitle) return 0;
+
+    switch (order) {
+      case 'ASC':
+        if (prevTitle < nextTitle) return -1;
+        return 1;
+      case "DESC":
+        if (prevTitle < nextTitle) return 1;
+        return -1;
+    }
+  }
+}

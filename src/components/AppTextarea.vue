@@ -1,6 +1,6 @@
 <template>
   <label class="input-wrapper">
-    <span>{{ label }}:</span>
+    <span v-if="label">{{ label }}:</span>
     <textarea
       v-model="inputValue"
       type="text"
@@ -11,9 +11,10 @@
 </template>
 
 <script setup lang="ts">
-import { LabeledInputProps } from './types';
 
-interface TextareaProps extends LabeledInputProps {}
+interface TextareaProps {
+  label?: string;
+}
 
 const props = defineProps<TextareaProps>();
 const inputValue = defineModel<string>();
