@@ -1,13 +1,13 @@
 import { defineStore } from "pinia";
 import { rendererReminderApi } from "../api/reminder";
 import { Reminder } from "../../shared/models/Reminder";
-import { isToday, isUpcoming } from "../utils";
+import { isExpired, isToday, isUpcoming } from "../utils";
 
 export enum ReminderFilter {
   Today = 'Today',
   Upcoming = 'Upcoming',
   Repeating = 'Repeating',
-  Completed = 'Completed',
+  Expired = 'Expired',
 }
 
 interface State {
@@ -33,15 +33,19 @@ export const useAppStore = defineStore('app', {
       });
     },
     today(): Reminder[] {
-      const rems = this.reminders.filter(reminder => {
+      this.currentDate;
+      
+      const reminders = this.reminders.filter(reminder => {
         if (!reminder.date) return false;
 
         return isToday(new Date(reminder.date));
       });
-      return rems;
+      return reminders;
     },
-    upcoming: (state) => {
-      return state.reminders.filter(reminder => {
+    upcoming(): Reminder[] {
+      this.currentDate;
+
+      return this.reminders.filter(reminder => {
         if (!reminder.date) return false;
 
         return isUpcoming(new Date(reminder.date));
@@ -49,6 +53,15 @@ export const useAppStore = defineStore('app', {
     },
     repeating(): Reminder[] {
       return this.reminders.filter(reminder => reminder.isRecurrent);
+    },
+    expired(): Reminder[] {
+      this.currentDate;
+
+      return this.reminders.filter(reminder => {
+        if (!reminder.date) return false;
+
+        return isExpired(new Date(reminder.date));
+      });
     },
     filteredReminders(): Reminder[] {
       switch (this.currentFilter) {
@@ -58,6 +71,8 @@ export const useAppStore = defineStore('app', {
           return this.upcoming;
         case ReminderFilter.Repeating:
           return this.repeating;
+        case ReminderFilter.Expired:
+          return this.expired;
         default:
           return this.reminders;
       }

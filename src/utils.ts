@@ -95,7 +95,7 @@ export const fillMonth = (
   month = new Date().getMonth()
 ) => {
   const firstDay = new Date(year, month, 1).getDay();
-  const lastDay = new Date(year, month + 1, 0).getDay()
+  const lastDay = new Date(year, month + 1, 0).getDay();
 
   const totalDaysLastMonth = getDaysInMonth(year, month - 1);
   const totalDaysMonth = getDaysInMonth(year, month);
@@ -131,6 +131,12 @@ export function isUpcoming(date: Date) {
   const [_, todayEnd] = getDayRange(new Date());
 
   return date > todayEnd;
+}
+
+export function isExpired(date: Date) {
+  const [todayStart] = getDayRange(new Date());
+
+  return date < todayStart;
 }
 
 export function getTimeToNextDay() {
