@@ -10,7 +10,7 @@
         <AppInput
           class="flex-1"
           placeholder="Search..."
-          @input="debouncedOnInput"
+          v-model="filterQuery"
         />
         <div class="flex flex-0 justify-center items-center bg-neutral-200 rounded-md cursor-pointer">
           <div class="p-2.5" @click="onSortClick">
@@ -22,7 +22,7 @@
 
     <div class="reminders">
       <ReminderItem
-        v-for="reminder in appStore.filteredCategorisedReminders"
+        v-for="reminder in filteredReminders"
         :key="reminder.id"
         :reminder
         :show-date="appStore.currentCategory !== ReminderCategory.Today"
@@ -33,21 +33,39 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { ReminderCategory, useAppStore } from '../stores/appStore';
 import ReminderItem from '../components/ReminderItem.vue';
 import AppInput from '../components/AppInput.vue';
-import { ArrowUpAZ } from '@lucide/vue';
-import { ArrowDownAZ } from '@lucide/vue';
+import { ArrowUpAZ, ArrowDownAZ } from '@lucide/vue';
 import { debounce } from '../utils';
 
 const appStore = useAppStore();
 
-function onInput(e: InputEvent) {
-  appStore.setFilter((e.target as HTMLInputElement).value);
+const filterQuery = ref('');
+const filter = ref('');
+
+function setFilter(value: string) {
+  filter.value = value;
 }
 
-const debouncedOnInput = debounce(onInput, 300);
+const debouncedSetFilter = debounce(setFilter, 300);
+
+watch(filterQuery, value => {
+  if (!value) {
+    setFilter(value);
+  } else {
+    debouncedSetFilter(value);
+  }
+});
+
+const filteredReminders = computed(() => {
+  if (!filter.value) return appStore.categorisedReminders;
+
+  return appStore.categorisedReminders.filter(reminder => 
+    reminder.title.toLowerCase().includes(filter.value) ||
+    reminder.description.toLowerCase().includes(filter.value));
+});
 
 const header = computed(() => {
   return `${ReminderCategory[appStore.currentCategory]}`;
@@ -59,7 +77,7 @@ const remindersCountText = computed(() => {
   return `${count} ${count > 1 ? 'reminders' : 'reminder'}`;
 });
 
-const onSortClick = (e: Event) => {
+const onSortClick = () => {
   appStore.setSortTitle(appStore.sortOrder == 'ASC' ? 'DESC' : 'ASC');
 }
 
