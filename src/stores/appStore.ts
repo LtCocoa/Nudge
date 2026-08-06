@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { rendererReminderApi } from "../api/reminder";
 import { Reminder } from "../../shared/models/Reminder";
-import { getReminderComparator, isExpired, isToday, isUpcoming } from "../utils";
+import { isExpired, isToday, isUpcoming } from "../utils";
 
 export enum ReminderCategory {
   Today = 'Today',
@@ -17,7 +17,6 @@ interface State {
   currentCategory: ReminderCategory;
   isLoading: boolean;
   currentDate: Date;
-  filter: string;
   sortOrder: SortOrder;
 }
 
@@ -27,7 +26,6 @@ export const useAppStore = defineStore('app', {
     currentCategory: ReminderCategory.Today,
     isLoading: false,
     currentDate: new Date(),
-    filter: '',
     sortOrder: 'ASC',
   }),
   getters: {
@@ -83,15 +81,6 @@ export const useAppStore = defineStore('app', {
           return this.reminders;
       }
     },
-    filteredCategorisedReminders(): Reminder[] {
-      const sorted = [...this.categorisedReminders]
-        .sort(getReminderComparator(this.sortOrder));
-
-      if (!this.filter) return sorted;
-
-      const trimmedFilter = this.filter.trim();
-      return sorted.filter(reminder => reminder.title.includes(trimmedFilter));
-    }
   },
   actions: {
     async getReminders() {
@@ -120,9 +109,6 @@ export const useAppStore = defineStore('app', {
     },
     updateCurrentDate() {
       this.currentDate = new Date();
-    },
-    setFilter(filter: string) {
-      this.filter = filter;
     },
     setSortTitle(title: SortOrder) {
       this.sortOrder = title;

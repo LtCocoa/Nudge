@@ -4,7 +4,7 @@
     <input
       v-model="inputValue"
       type="datetime-local"
-      class="input"
+      class="input-field"
     />
   </label>
 </template>

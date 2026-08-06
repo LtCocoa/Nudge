@@ -4,7 +4,7 @@
     <textarea
       v-model="inputValue"
       type="text"
-      class="input min-h-12 max-h-36"
+      class="input-field min-h-12 max-h-36"
       maxlength="100"
     />
   </label>
