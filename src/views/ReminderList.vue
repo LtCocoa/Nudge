@@ -14,7 +14,10 @@
         />
         <div class="flex flex-0 justify-center items-center bg-neutral-200 rounded-md cursor-pointer">
           <div class="p-2.5" @click="onSortClick">
-            <component :is="appStore.sortOrder == 'ASC' ? ArrowDownAZ : ArrowUpAZ" />
+            <component
+              :is="appStore.sortOrder == 'ASC' ? ClockArrowDown : ClockArrowUp"
+              class="text-text-secondary"
+            />
           </div>
         </div>
       </div>
@@ -37,8 +40,8 @@ import { computed, ref, watch } from 'vue';
 import { ReminderCategory, useAppStore } from '../stores/appStore';
 import ReminderItem from '../components/ReminderItem.vue';
 import AppInput from '../components/AppInput.vue';
-import { ArrowUpAZ, ArrowDownAZ } from '@lucide/vue';
-import { debounce } from '../utils';
+import { ClockArrowUp, ClockArrowDown } from '@lucide/vue';
+import { debounce, getReminderDateComparator } from '../utils';
 
 const appStore = useAppStore();
 
@@ -60,9 +63,11 @@ watch(filterQuery, value => {
 });
 
 const filteredReminders = computed(() => {
-  if (!filter.value) return appStore.categorisedReminders;
+  const sorted = [...appStore.categorisedReminders].sort(getReminderDateComparator(appStore.sortOrder));
 
-  return appStore.categorisedReminders.filter(reminder => 
+  if (!filter.value) return sorted;
+
+  return sorted.filter(reminder => 
     reminder.title.toLowerCase().includes(filter.value) ||
     reminder.description.toLowerCase().includes(filter.value));
 });

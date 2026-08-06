@@ -153,7 +153,7 @@ export function debounce(fn: any, ms: number) {
   }
 }
 
-export function getReminderComparator(order: 'ASC' | 'DESC') {
+export function getReminderTitleComparator(order: 'ASC' | 'DESC') {
   return (left: Reminder, right: Reminder) => {
     const [prevTitle, nextTitle] = [left.title.toLowerCase(), right.title.toLowerCase()];
 
@@ -165,6 +165,26 @@ export function getReminderComparator(order: 'ASC' | 'DESC') {
         return 1;
       case "DESC":
         if (prevTitle < nextTitle) return 1;
+        return -1;
+    }
+  }
+}
+
+export function getReminderDateComparator(order: 'ASC' | 'DESC') {
+  return (left: Reminder, right: Reminder) => {
+    if (!left.date) return -1;
+    if (!right.date) return -1;
+    
+    const [prevDate, nextDate] = [new Date(left.date), new Date(right.date)];
+
+    if (prevDate == nextDate) return 0;
+
+    switch (order) {
+      case 'ASC':
+        if (prevDate < nextDate) return -1;
+        return 1;
+      case "DESC":
+        if (prevDate < nextDate) return 1;
         return -1;
     }
   }
