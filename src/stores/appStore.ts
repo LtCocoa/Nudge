@@ -8,6 +8,7 @@ export enum ReminderCategory {
   Upcoming = 'Upcoming',
   Repeating = 'Repeating',
   Expired = 'Expired',
+  Todo = 'Todo'
 }
 
 type SortOrder = 'ASC' | 'DESC';
@@ -67,6 +68,9 @@ export const useAppStore = defineStore('app', {
         return isExpired(new Date(reminder.date));
       });
     },
+    todo(): Reminder[] {
+      return this.reminders.filter(reminder => !reminder.date);
+    },
     categorisedReminders(): Reminder[] {
       switch (this.currentCategory) {
         case ReminderCategory.Today:
@@ -77,6 +81,8 @@ export const useAppStore = defineStore('app', {
           return this.repeating;
         case ReminderCategory.Expired:
           return this.expired;
+        case ReminderCategory.Todo:
+          return this.todo;
         default:
           return this.reminders;
       }

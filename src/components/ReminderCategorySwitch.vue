@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarCheck2, CalendarClock, CalendarDays, LucideIcon } from '@lucide/vue';
+import { CalendarCheck2, CalendarClock, CalendarDays, LucideIcon, CheckSquare2 } from '@lucide/vue';
 import { ReminderCategory, useAppStore } from '../stores/appStore';
 import { computed } from 'vue';
 
@@ -54,6 +54,12 @@ const filterItems = computed<ReminderFilterItem[]>(() => [
     filter: ReminderCategory.Expired,
     count: appStore.expired.length,
     icon: CalendarCheck2,
+  },
+  {
+    title: ReminderCategory[ReminderCategory.Todo],
+    filter: ReminderCategory.Todo,
+    count: appStore.todo.length,
+    icon: CheckSquare2,
   }
 ]);
 </script>
