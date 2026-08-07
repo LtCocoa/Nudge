@@ -1,13 +1,19 @@
-import { reminderScheduler } from "./ReminderScheduler";
+import { ReminderScheduler } from "./ReminderScheduler";
 import { reminderRepository } from "./ReminderRepository";
 import { Reminder } from "../../shared/models/Reminder";
 import { logger } from "../Logger";
 
-class ReminderService {
-  init() {
-    reminderScheduler.init(reminderRepository.getAll());
+export class ReminderService {
+  constructor(
+    private readonly reminderScheduler: ReminderScheduler,
+  ) {
+    this.initScheduler();
   }
-  
+
+  private initScheduler() {
+    this.reminderScheduler.init(reminderRepository.getAll());
+  }
+ 
   async getAll() {
     try {
       const reminders = await reminderRepository.getAll();
@@ -17,7 +23,7 @@ class ReminderService {
       if (err instanceof Error) {
         logger.error(err.message);
       }
-
+ 
       return [];
     }
   }
@@ -28,7 +34,7 @@ class ReminderService {
       logger.log(`Created new reminder ${reminder.id}`);
 
       if (reminder.date) {
-        reminderScheduler.schedule(reminder);
+        this.reminderScheduler.schedule(reminder);
         logger.log(`Scheduled reminder ${reminder.id}`);
       }
     } catch (err) {
@@ -43,9 +49,7 @@ class ReminderService {
   }
 
   delete(reminderId: string) {
-    reminderScheduler.cancel(reminderId);
+    this.reminderScheduler.cancel(reminderId);
     return reminderRepository.delete(reminderId);
   }
 }
-
-export const reminderService = new ReminderService();

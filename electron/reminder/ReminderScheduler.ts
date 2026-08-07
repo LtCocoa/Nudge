@@ -1,9 +1,13 @@
 import schedule from 'node-schedule';
 import { Notification } from 'electron';
 import { Reminder } from '../../shared/models/Reminder';
-import { notificationService } from '../notification/NotificationService';
+import { type NotificationService } from '../notification/NotificationService';
 
-class ReminderScheduler {
+export class ReminderScheduler {
+  constructor(
+    private readonly notificationService: NotificationService,
+  ) {}
+
   init(reminders: Reminder[] = []) {
     reminders.forEach(reminder => {
       if (reminder.date) {
@@ -37,7 +41,7 @@ class ReminderScheduler {
 
       // todo - открыть окно приложения и показать напоминалку по клику на уведомление
       notification.show();
-      notificationService.toggleFlash(true);
+      this.notificationService.toggleFlash(true);
     });
   }
 
@@ -45,5 +49,3 @@ class ReminderScheduler {
     schedule.cancelJob(reminderId);
   }
 }
-
-export const reminderScheduler = new ReminderScheduler();
