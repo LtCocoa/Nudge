@@ -1,49 +1,35 @@
-import { app, BrowserWindow, Tray, Menu } from 'electron/main';
+import { app, BrowserWindow, Menu } from 'electron/main';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { session } from 'electron';
-import { reminderService } from './reminder/ReminderService';
 import { registerReminderHandlers } from './ipc/reminder';
-import { notificationService } from './notification/NotificationService';
 import { logger } from './Logger';
+import { ReminderService } from './reminder/ReminderService';
+import { NotificationService } from './notification/NotificationService';
+import { TrayService } from './tray/TrayService';
+import { ReminderScheduler } from './reminder/ReminderScheduler';
 
 const APP_NAME = 'Nudge';
 const APP_ID = 'dev.ltcocoa.nudge';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-app.setAppUserModelId(APP_ID);
-
 process.env.APP_ROOT = path.join(__dirname, '..');
-
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL'];
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron');
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
-
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST;
+
+app.setAppUserModelId(APP_ID);
 
 const pathToIcon = path.join(process.env.APP_ROOT, 'electron', 'assets', 'icon.ico');
 
-let win: BrowserWindow;
-let tray: Tray;
+let trayService: TrayService;
+let notificationService: NotificationService;
+let reminderService: ReminderService;
 
-process.on('uncaughtException', (err) => {
-  logger.error(err.stack ?? String(err));
-});
-
-process.on('unhandledRejection', (err) => {
-  logger.error(String(err));
-});
-
-const closeApplication = () => {
-  logger.log('App closed');
-
-  if (process.platform !== 'darwin') {
-    app.exit();
-  }
-};
+registerProcessHandlers();
 
 function createWindow() {
-  win = new BrowserWindow({
+  const window = new BrowserWindow({
     width: 1200,
     height: 900,
     icon: pathToIcon,
@@ -52,37 +38,24 @@ function createWindow() {
     },
   });
 
-  notificationService.setWindow(win);
-
-  registerReminderHandlers();
-
   if (VITE_DEV_SERVER_URL) {
-    win.loadURL(VITE_DEV_SERVER_URL);
+    window.loadURL(VITE_DEV_SERVER_URL);
   } else {
-    win.loadFile(path.join(RENDERER_DIST, 'index.html'));
+    window.loadFile(path.join(RENDERER_DIST, 'index.html'));
   }
 
-  win.on('close', (event) => {
+  window.on('close', (event) => {
     event.preventDefault();
-    win.hide();
+    window.hide();
   });
 
-  win.setMenu(null);
-  win.webContents.openDevTools();
+  window.setMenu(null);
+  window.webContents.openDevTools();
+
+  return window;
 }
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on('window-all-closed', closeApplication);
-
-app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
-});
+registerAppHandlers();
 
 app.whenReady().then(() => {
   logger.log('App started');
@@ -96,19 +69,57 @@ app.whenReady().then(() => {
     })
   });
 
-  reminderService.init();
+  const window = createWindow();
+  initServices(window);
+  registerReminderHandlers(reminderService);
+});
 
-  tray = new Tray(pathToIcon);
-  const contextMenu = Menu.buildFromTemplate([
-    { label: 'Quit', type: 'normal', click: closeApplication }
-  ]);
+function closeApplication() {
+  logger.log('App closed');
 
-  tray.setToolTip(APP_NAME);
-  tray.setContextMenu(contextMenu);
+  if (process.platform !== 'darwin') {
+    app.exit();
+  }
+};
 
-  tray.on('click', () => {
-    win.show();
+function initServices(window: BrowserWindow) {
+  if (!app.isReady()) throw new Error('Can not initialize services before app is ready');
+
+  trayService = new TrayService(
+    window,
+    pathToIcon,
+    APP_NAME,
+    Menu.buildFromTemplate([
+      { label: 'Quit', type: 'normal', click: closeApplication }
+    ]),
+  );
+
+  notificationService = new NotificationService(window);
+  const schedulerService = new ReminderScheduler(notificationService);
+  reminderService = new ReminderService(schedulerService);
+}
+
+function registerAppHandlers() {
+  // Quit when all windows are closed, except on macOS. There, it's common
+  // for applications and their menu bar to stay active until the user quits
+  // explicitly with Cmd + Q.
+  app.on('window-all-closed', closeApplication);
+
+  app.on('activate', () => {
+    // On OS X it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+}
+
+function registerProcessHandlers() {
+  process.on('uncaughtException', (err) => {
+    logger.error(err.stack ?? String(err));
   });
 
-  createWindow();
-});
+  process.on('unhandledRejection', (err) => {
+    logger.error(String(err));
+  });
+}

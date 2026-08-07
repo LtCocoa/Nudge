@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
-import { reminderService } from "../reminder/ReminderService";
+import { ReminderService } from "../reminder/ReminderService";
 
-export function registerReminderHandlers() {
+export function registerReminderHandlers(reminderService: ReminderService) {
   ipcMain.handle('get-reminders', () => {
     return reminderService.getAll();
   });
