@@ -3,14 +3,14 @@
     <div
       class="filter-item"
       :class="{
-        active: appStore.currentCategory === filterItem.filter,
+        active: appStore.currentCategory === filterItem.category,
       }"
       v-for="(filterItem, index) in filterItems"
       :key="index"
-      @click="appStore.setCategory(filterItem.filter)"
+      @click="appStore.setCategory(filterItem.category)"
     >
       <component :is="filterItem.icon" />
-      <span class="filter-item-title">{{ filterItem.title }}</span>
+      <span class="filter-item-title">{{ ReminderCategory[filterItem.category] }}</span>
       <span class="filter-item-count">{{ filterItem.count }}</span>
     </div>
   </div>
@@ -22,8 +22,7 @@ import { ReminderCategory, useAppStore } from '../stores/appStore';
 import { computed } from 'vue';
 
 interface ReminderFilterItem {
-  title: string;
-  filter: ReminderCategory,
+  category: ReminderCategory,
   count: number,
   icon: LucideIcon,
 }
@@ -32,32 +31,27 @@ const appStore = useAppStore();
 
 const filterItems = computed<ReminderFilterItem[]>(() => [
   {
-    title: ReminderCategory[ReminderCategory.Today],
-    filter: ReminderCategory.Today,
+    category: ReminderCategory.Today,
     count: appStore.today.length,
     icon: CalendarClock,
   },
   {
-    title: ReminderCategory[ReminderCategory.Upcoming],
-    filter: ReminderCategory.Upcoming,
+    category: ReminderCategory.Upcoming,
     count: appStore.upcoming.length,
     icon: CalendarDays,
   },
   // {
-  //   title: ReminderFilter[ReminderFilter.Repeating],
   //   filter: ReminderFilter.Repeating,
   //   count: appStore.repeating.length,
   //   icon: CalendarSync,
   // },
   {
-    title: ReminderCategory[ReminderCategory.Expired],
-    filter: ReminderCategory.Expired,
+    category: ReminderCategory.Expired,
     count: appStore.expired.length,
     icon: CalendarCheck2,
   },
   {
-    title: ReminderCategory[ReminderCategory.Todo],
-    filter: ReminderCategory.Todo,
+    category: ReminderCategory.Todo,
     count: appStore.todo.length,
     icon: CheckSquare2,
   }
