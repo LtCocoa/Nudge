@@ -17,6 +17,7 @@ export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL'];
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron');
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST;
+const isDev = Boolean(VITE_DEV_SERVER_URL);
 
 app.setAppUserModelId(APP_ID);
 
@@ -37,9 +38,12 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.mjs'),
     },
   });
+  
+  window.setMenu(null);
 
-  if (VITE_DEV_SERVER_URL) {
-    window.loadURL(VITE_DEV_SERVER_URL);
+  if (isDev) {
+    window.loadURL(VITE_DEV_SERVER_URL!);
+    window.webContents.openDevTools();
   } else {
     window.loadFile(path.join(RENDERER_DIST, 'index.html'));
   }
@@ -48,9 +52,6 @@ function createWindow() {
     event.preventDefault();
     window.hide();
   });
-
-  window.setMenu(null);
-  window.webContents.openDevTools();
 
   return window;
 }
