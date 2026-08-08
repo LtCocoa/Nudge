@@ -59,7 +59,11 @@ registerAppHandlers();
 
 app.whenReady().then(() => {
   logger.log('App started');
-  
+
+  app.setLoginItemSettings({
+    openAtLogin: true,
+  });
+
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
